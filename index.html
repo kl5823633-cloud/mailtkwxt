@@ -1,1911 +1,432 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>TempMail</title>
-  <style>
-    /* CSS giữ nguyên như cũ, không thay đổi để đảm bảo giao diện */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      background: #0a0a0a;
-      color: #e0e0e0;
-      min-height: 100vh;
-    }
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: #1a1a1a; }
-    ::-webkit-scrollbar-thumb { background: #3a3a3a; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #4a4a4a; }
-    .page { display: none; min-height: 100vh; }
-    .page.active { display: block; }
-    .auth-page { display: none; flex-direction: column; justify-content: center; align-items: center; }
-    .auth-page.active { display: flex; }
-    .auth-container {
-      background: #1a1a1a;
-      border-radius: 20px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.05);
-      width: 90%;
-      max-width: 400px;
-      padding: 40px;
-      border: 1px solid #2a2a2a;
-    }
-    .auth-container h2 {
-      text-align: center;
-      color: #fff;
-      margin-bottom: 30px;
-      font-size: 2em;
-      font-weight: 500;
-      letter-spacing: -0.5px;
-    }
-    .form-group { margin-bottom: 20px; }
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      color: #a0a0a0;
-      font-weight: 400;
-      font-size: 0.9em;
-      letter-spacing: 0.3px;
-    }
-    .form-group input[type="text"],
-    .form-group input[type="password"] {
-      width: 100%;
-      padding: 12px 16px;
-      background: #0d0d0d;
-      border: 1px solid #2a2a2a;
-      border-radius: 12px;
-      font-size: 1em;
-      transition: all 0.3s;
-      color: #fff;
-    }
-    .form-group input:focus {
-      outline: none;
-      border-color: #10a37f;
-      background: #000;
-      box-shadow: 0 0 0 2px rgba(16, 163, 127, 0.2);
-    }
-    .checkbox-group {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .checkbox-group input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      accent-color: #10a37f;
-    }
-    .btn-submit {
-      width: 100%;
-      padding: 14px;
-      background: #10a37f;
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-size: 1.1em;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s;
-      margin-top: 10px;
-    }
-    .btn-submit:hover {
-      background: #0d8b6c;
-      transform: translateY(-1px);
-      box-shadow: 0 10px 25px rgba(16, 163, 127, 0.3);
-    }
-    .auth-links {
-      text-align: center;
-      margin-top: 25px;
-    }
-    .auth-links a {
-      color: #10a37f;
-      text-decoration: none;
-      font-size: 0.95em;
-      cursor: pointer;
-    }
-    .auth-links a:hover { color: #0d8b6c; text-decoration: underline; }
-    .alert {
-      padding: 12px;
-      border-radius: 12px;
-      margin-bottom: 20px;
-      text-align: center;
-      font-size: 0.95em;
-    }
-    .alert-error {
-      background: rgba(220, 38, 38, 0.1);
-      color: #ef4444;
-      border: 1px solid rgba(239, 68, 68, 0.2);
-    }
-    .alert-success {
-      background: rgba(16, 163, 127, 0.1);
-      color: #10a37f;
-      border: 1px solid rgba(16, 163, 127, 0.2);
-    }
-    .footer {
-      text-align: center;
-      padding: 20px;
-      color: #404040;
-      font-size: 0.9em;
-      border-top: 1px solid #2a2a2a;
-      margin-top: 30px;
-    }
-    .footer span { color: #10a37f; }
-    .auth-footer {
-      margin-top: 20px;
-      text-align: center;
-      color: #404040;
-      font-size: 0.9em;
-    }
-    .auth-footer span { color: #10a37f; }
-    .navbar {
-      background: #1a1a1a;
-      padding: 16px 24px;
-      color: white;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
-      border-bottom: 1px solid #2a2a2a;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .navbar-brand {
-      font-size: 1.4em;
-      font-weight: 600;
-      background: linear-gradient(135deg, #10a37f, #0d8b6c);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      letter-spacing: -0.5px;
-    }
-    .navbar-user {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
-    .username-badge {
-      background: #2a2a2a;
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 0.95em;
-      color: #e0e0e0;
-      border: 1px solid #3a3a3a;
-    }
-    .admin-badge {
-      background: rgba(234, 179, 8, 0.15);
-      color: #eab308;
-      border: 1px solid rgba(234, 179, 8, 0.3);
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 0.8em;
-      font-weight: 600;
-    }
-    .logout-btn {
-      background: #2a2a2a;
-      color: #ff6b6b;
-      text-decoration: none;
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 0.95em;
-      transition: all 0.3s;
-      border: 1px solid #3a3a3a;
-      cursor: pointer;
-    }
-    .logout-btn:hover { background: #3a3a3a; color: #ff5252; }
-    .menu-toggle {
-      display: none;
-      background: #2a2a2a;
-      border: 1px solid #3a3a3a;
-      color: #10a37f;
-      font-size: 1.5em;
-      padding: 8px 15px;
-      border-radius: 12px;
-      margin-right: 15px;
-      cursor: pointer;
-    }
-    .status-bar {
-      background: #0d0d0d;
-      padding: 12px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.95em;
-      border-bottom: 1px solid #1e1e1e;
-      max-width: 100%;
-    }
-    .online-status {
-      color: #10a37f;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .online-status::before {
-      content: '●';
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-    .dashboard-container {
-      max-width: 1600px;
-      margin: 24px auto;
-      padding: 0 20px;
-      display: grid;
-      grid-template-columns: 350px 1fr;
-      gap: 24px;
-    }
-    .sidebar {
-      background: #1a1a1a;
-      border-radius: 20px;
-      padding: 24px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      border: 1px solid #2a2a2a;
-      height: fit-content;
-    }
-    .main-content {
-      background: #1a1a1a;
-      border-radius: 20px;
-      padding: 24px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      border: 1px solid #2a2a2a;
-      min-height: 600px;
-    }
-    .section-title {
-      color: #fff;
-      margin-bottom: 20px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid #2a2a2a;
-      font-size: 1.3em;
-      font-weight: 500;
-      letter-spacing: -0.3px;
-    }
-    .section-title::before {
-      content: '▍';
-      color: #10a37f;
-      margin-right: 8px;
-    }
-    .btn {
-      padding: 12px 20px;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: 500;
-      transition: all 0.3s;
-      width: 100%;
-      margin-bottom: 12px;
-      font-size: 1em;
-      letter-spacing: 0.3px;
-    }
-    .btn-primary {
-      background: #10a37f;
-      color: white;
-    }
-    .btn-primary:hover {
-      background: #0d8b6c;
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(16, 163, 127, 0.3);
-    }
-    .btn-danger {
-      background: #2a2a2a;
-      color: #ff6b6b;
-      border: 1px solid #3a3a3a;
-    }
-    .btn-danger:hover { background: #3a3a3a; color: #ff5252; }
-    .btn-secondary {
-      background: #2a2a2a;
-      color: #a0a0a0;
-      border: 1px solid #3a3a3a;
-    }
-    .btn-secondary:hover { background: #3a3a3a; }
-    .refresh-btn {
-      background: #2a2a2a;
-      color: #10a37f;
-      padding: 8px 16px;
-      border: 1px solid #3a3a3a;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 0.9em;
-      transition: all 0.3s;
-    }
-    .refresh-btn:hover { background: #3a3a3a; border-color: #10a37f; }
-    .email-list {
-      list-style: none;
-      max-height: 500px;
-      overflow-y: auto;
-      padding-right: 5px;
-    }
-    .email-item {
-      padding: 16px;
-      background: #0d0d0d;
-      border: 1px solid #2a2a2a;
-      border-radius: 16px;
-      margin-bottom: 12px;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-    .email-item:hover {
-      border-color: #10a37f;
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(16, 163, 127, 0.1);
-    }
-    .email-item.active {
-      border-color: #10a37f;
-      background: #0f0f0f;
-      box-shadow: 0 0 0 1px #10a37f;
-    }
-    .email-address {
-      font-weight: 600;
-      color: #fff;
-      word-break: break-all;
-      font-size: 0.95em;
-      margin-bottom: 8px;
-    }
-    .email-meta {
-      font-size: 0.85em;
-      color: #808080;
-      margin-top: 8px;
-      line-height: 1.5;
-    }
-    .copy-btn {
-      background: #1e1e1e;
-      color: #10a37f;
-      border: 1px solid #2a2a2a;
-      padding: 4px 10px;
-      border-radius: 8px;
-      font-size: 0.8em;
-      cursor: pointer;
-      margin-top: 8px;
-      transition: all 0.2s;
-    }
-    .copy-btn:hover { background: #2a2a2a; }
-    .mailbox { min-height: 500px; }
-    .mail-item {
-      padding: 16px;
-      background: #0d0d0d;
-      border: 1px solid #2a2a2a;
-      border-radius: 16px;
-      margin-bottom: 12px;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-    .mail-item:hover {
-      border-color: #10a37f;
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(16, 163, 127, 0.1);
-    }
-    .mail-sender {
-      font-weight: 600;
-      color: #10a37f;
-      font-size: 1em;
-      margin-bottom: 6px;
-    }
-    .mail-subject {
-      color: #e0e0e0;
-      margin: 8px 0;
-      font-size: 0.95em;
-      line-height: 1.5;
-    }
-    .mail-time {
-      font-size: 0.8em;
-      color: #808080;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .mail-time::before { content: '⏱️'; opacity: 0.7; }
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
-      color: #505050;
-      font-size: 1.1em;
-    }
-    .empty-state::before {
-      content: '📭';
-      display: block;
-      font-size: 3em;
-      margin-bottom: 15px;
-      opacity: 0.5;
-    }
-    .loading {
-      text-align: center;
-      padding: 40px;
-      color: #10a37f;
-    }
-    .loading::after {
-      content: '...';
-      animation: dots 1.5s steps(4, end) infinite;
-    }
-    @keyframes dots {
-      0%, 20% { content: '.'; }
-      40% { content: '..'; }
-      60%, 100% { content: '...'; }
-    }
-    .header-actions {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-      gap: 15px;
-    }
-    .current-email-badge {
-      background: #0d0d0d;
-      padding: 8px 16px;
-      border-radius: 20px;
-      color: #10a37f;
-      font-weight: 500;
-      font-size: 0.95em;
-      word-break: break-all;
-      border: 1px solid #2a2a2a;
-    }
-    .current-email-badge::before { content: '📬 '; opacity: 0.7; }
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.8);
-      backdrop-filter: blur(5px);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-    .modal.show { display: flex; }
-    .modal-content {
-      background: #1a1a1a;
-      padding: 30px;
-      border-radius: 24px;
-      max-width: 650px;
-      width: 90%;
-      max-height: 85vh;
-      overflow-y: auto;
-      border: 1px solid #2a2a2a;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-    }
-    .modal-title {
-      font-size: 1.3em;
-      font-weight: 600;
-      color: #fff;
-      margin-bottom: 20px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid #2a2a2a;
-    }
-    .modal-title::before { content: '📧'; margin-right: 10px; }
-    .modal-body {
-      margin-bottom: 25px;
-      color: #e0e0e0;
-      line-height: 1.6;
-    }
-    .modal-buttons {
-      display: flex;
-      gap: 12px;
-      margin-top: 25px;
-    }
-    .modal-btn {
-      flex: 1;
-      padding: 12px;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: 500;
-      font-size: 0.95em;
-      transition: all 0.3s;
-    }
-    .close-btn { background: #2a2a2a; color: #e0e0e0; border: 1px solid #3a3a3a; }
-    .close-btn:hover { background: #3a3a3a; }
-    .confirm-btn { background: #ef4444; color: white; }
-    .confirm-btn:hover { background: #dc2626; }
-    .cancel-btn { background: #2a2a2a; color: #e0e0e0; border: 1px solid #3a3a3a; }
-    .cancel-btn:hover { background: #3a3a3a; }
-    .mail-content { font-family: inherit; line-height: 1.6; }
-    .mail-content img { max-width: 100%; height: auto; border-radius: 8px; }
-    .mail-content table { max-width: 100%; overflow-x: auto; display: block; border-collapse: collapse; }
-    .mail-content a { color: #10a37f; text-decoration: none; }
-    .mail-content a:hover { text-decoration: underline; }
-    .mail-otp {
-      font-size: 2em;
-      font-weight: bold;
-      color: #10a37f;
-      text-align: center;
-      padding: 15px;
-      background: rgba(16, 163, 127, 0.1);
-      border-radius: 12px;
-      margin: 10px 0;
-      letter-spacing: 4px;
-      border: 1px dashed #10a37f;
-    }
-    .admin-panel {
-      max-width: 1200px;
-      margin: 24px auto;
-      padding: 0 20px;
-    }
-    .admin-card {
-      background: #1a1a1a;
-      border-radius: 20px;
-      padding: 24px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      border: 1px solid #2a2a2a;
-      margin-bottom: 24px;
-    }
-    .admin-tabs {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-    }
-    .admin-tab {
-      padding: 10px 20px;
-      border-radius: 12px;
-      border: 1px solid #2a2a2a;
-      background: #1a1a1a;
-      color: #a0a0a0;
-      cursor: pointer;
-      font-size: 0.95em;
-      transition: all 0.3s;
-    }
-    .admin-tab.active {
-      background: #10a37f;
-      color: white;
-      border-color: #10a37f;
-    }
-    .admin-tab:hover:not(.active) { background: #2a2a2a; color: #fff; }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-    .support-msg-card {
-      background: #0d0d0d;
-      border: 1px solid #2a2a2a;
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 12px;
-    }
-    .support-msg-card.unread { border-color: #10a37f; }
-    .support-msg-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-    .support-msg-from {
-      font-weight: 600;
-      color: #10a37f;
-      font-size: 0.95em;
-    }
-    .support-msg-time { font-size: 0.8em; color: #606060; }
-    .support-msg-text {
-      color: #e0e0e0;
-      line-height: 1.5;
-      margin-bottom: 12px;
-    }
-    .support-reply-box { margin-top: 12px; }
-    .support-reply-box textarea {
-      width: 100%;
-      padding: 10px 14px;
-      background: #1a1a1a;
-      border: 1px solid #2a2a2a;
-      border-radius: 10px;
-      color: #e0e0e0;
-      font-family: inherit;
-      font-size: 0.9em;
-      resize: vertical;
-      min-height: 60px;
-    }
-    .support-reply-box textarea:focus {
-      outline: none;
-      border-color: #10a37f;
-    }
-    .reply-text {
-      background: rgba(16, 163, 127, 0.08);
-      border: 1px solid rgba(16, 163, 127, 0.2);
-      border-radius: 10px;
-      padding: 10px;
-      margin-top: 8px;
-      color: #10a37f;
-      font-size: 0.9em;
-    }
-    .reply-text::before { content: '↩ Admin: '; font-weight: bold; }
-    .users-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.95em;
-    }
-    .users-table th {
-      background: #0d0d0d;
-      color: #a0a0a0;
-      padding: 12px 16px;
-      text-align: left;
-      font-weight: 500;
-    }
-    .users-table td {
-      padding: 12px 16px;
-      border-bottom: 1px solid #1e1e1e;
-      color: #e0e0e0;
-    }
-    .users-table tr:hover td { background: #0f0f0f; }
-    .support-fab {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background: #10a37f;
-      color: white;
-      border: none;
-      font-size: 1.4em;
-      cursor: pointer;
-      box-shadow: 0 6px 20px rgba(16, 163, 127, 0.4);
-      transition: all 0.3s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 500;
-    }
-    .support-fab:hover {
-      background: #0d8b6c;
-      transform: scale(1.1);
-      box-shadow: 0 8px 25px rgba(16, 163, 127, 0.5);
-    }
-    .support-badge {
-      position: absolute;
-      top: -4px;
-      right: -4px;
-      background: #ef4444;
-      color: white;
-      border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      font-size: 0.7em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-    }
-    .support-chat-modal .modal-content {
-      max-width: 480px;
-    }
-    .chat-messages {
-      max-height: 320px;
-      overflow-y: auto;
-      padding: 8px 0;
-      margin-bottom: 16px;
-    }
-    .chat-bubble {
-      padding: 10px 14px;
-      border-radius: 14px;
-      margin-bottom: 10px;
-      max-width: 85%;
-      line-height: 1.5;
-      font-size: 0.92em;
-    }
-    .bubble-user {
-      background: #10a37f;
-      color: white;
-      margin-left: auto;
-      border-radius: 14px 14px 4px 14px;
-    }
-    .bubble-admin {
-      background: #2a2a2a;
-      color: #e0e0e0;
-      margin-right: auto;
-      border-radius: 14px 14px 14px 4px;
-    }
-    .bubble-time {
-      font-size: 0.75em;
-      opacity: 0.6;
-      margin-top: 4px;
-    }
-    .chat-input-area {
-      display: flex;
-      gap: 8px;
-      align-items: flex-end;
-    }
-    .chat-input-area textarea {
-      flex: 1;
-      padding: 10px 14px;
-      background: #0d0d0d;
-      border: 1px solid #2a2a2a;
-      border-radius: 12px;
-      color: #e0e0e0;
-      font-family: inherit;
-      font-size: 0.92em;
-      resize: none;
-      height: 44px;
-    }
-    .chat-input-area textarea:focus {
-      outline: none;
-      border-color: #10a37f;
-    }
-    .chat-send-btn {
-      padding: 10px 16px;
-      background: #10a37f;
-      color: white;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      font-size: 1.1em;
-      transition: all 0.3s;
-      height: 44px;
-    }
-    .chat-send-btn:hover { background: #0d8b6c; }
-    .chat-empty {
-      text-align: center;
-      padding: 30px;
-      color: #505050;
-      font-size: 0.9em;
-    }
-    .toast {
-      position: fixed;
-      top: 80px;
-      right: 20px;
-      background: #1a1a1a;
-      border: 1px solid #2a2a2a;
-      border-radius: 14px;
-      padding: 14px 18px;
-      font-size: 0.95em;
-      color: #e0e0e0;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      z-index: 9999;
-      transform: translateX(150%);
-      transition: transform 0.3s ease;
-      max-width: 300px;
-    }
-    .toast.show { transform: translateX(0); }
-    .toast.toast-success { border-color: #10a37f; color: #10a37f; }
-    .toast.toast-error { border-color: #ef4444; color: #ef4444; }
-    @media (max-width: 768px) {
-      .dashboard-container {
-        grid-template-columns: 1fr;
-        margin: 0;
-        padding: 12px;
-        gap: 12px;
-      }
-      .sidebar {
-        position: fixed;
-        left: -100%;
-        top: 60px;
-        width: 85%;
-        height: calc(100vh - 60px);
-        transition: left 0.3s ease;
-        z-index: 99;
-        border-radius: 0 20px 20px 0;
-        overflow-y: auto;
-      }
-      .sidebar.show { left: 0; }
-      .menu-toggle { display: block; }
-      .navbar { padding: 12px 16px; }
-      .header-actions { flex-direction: column; align-items: flex-start; }
-      .modal-content { padding: 20px; width: 95%; }
-      .admin-panel { padding: 0 12px; margin: 12px auto; }
-      .support-fab { bottom: 16px; right: 16px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>TempMail Pro V3 – by Lê Viết Tấn Khang</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ... (Giữ nguyên phần Style của bạn đã cung cấp) ... */
+:root{--bg:#080c10;--bg2:#0e1318;--bg3:#141a22;--surface:#19202a;--surface2:#1f2836;--border:#232d3a;--border2:#2a3545;--accent:#00d4a0;--accent2:#00b589;--accent-glow:rgba(0,212,160,0.18);--text:#e2eaf4;--text2:#8da0b4;--text3:#546272;--danger:#ff4b6e;--warn:#f59e0b;--coin:#fbbf24;--radius:14px;--radius-sm:8px;--shadow:0 8px 32px rgba(0,0,0,0.5);}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden;}
+.view{display:none;min-height:100vh;}.view.active{display:flex;}
+#view-login,#view-register{flex-direction:column;justify-content:center;align-items:center;background:radial-gradient(ellipse at 50% 0%,rgba(0,212,160,0.08) 0%,transparent 65%),var(--bg);padding:20px;}
+.auth-logo{font-family:'Space Mono',monospace;font-size:1.7em;font-weight:700;color:var(--accent);letter-spacing:-1px;margin-bottom:8px;text-align:center;}
+.auth-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:36px 32px;width:100%;max-width:400px;box-shadow:0 24px 64px rgba(0,0,0,0.6);}
+.form-group{margin-bottom:18px;}.form-input{width:100%;padding:13px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);color:#fff;outline:none;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 20px;border:none;border-radius:var(--radius-sm);font-weight:600;cursor:pointer;transition:all 0.25s;}
+.btn-primary{background:var(--accent);color:#000;}.btn-full{width:100%;}
+.navbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;backdrop-filter:blur(12px);}
+.main-layout{display:grid;grid-template-columns:320px 1fr;gap:20px;padding:20px;max-width:1600px;margin:0 auto;width:100%;flex:1;}
+.sidebar{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;height:fit-content;}
+.main-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;min-height:540px;}
+.email-item{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;cursor:pointer;}
+.email-item.active{border-color:var(--accent);background:rgba(0,212,160,0.04);}
+.mail-item{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:10px;cursor:pointer;}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);justify-content:center;align-items:center;z-index:500;}
+.modal-overlay.open{display:flex;}.modal-box{background:var(--surface);border-radius:18px;padding:28px;width:90%;max-width:560px;max-height:82vh;overflow-y:auto;}
+.sub-lock{position:absolute;inset:0;background:rgba(8,12,16,0.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:50;text-align:center;}
+.toast-container{position:fixed;top:70px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;}
+.toast{background:var(--surface2);border-radius:10px;padding:12px 18px;animation:toastIn 0.3s ease;}
+@keyframes toastIn{from{opacity:0;transform:translateX(40px);}to{opacity:1;transform:translateX(0);}}
+/* ... (Thêm các style bổ sung nếu cần) ... */
+</style>
 </head>
 <body>
 
-<!-- ===== TOAST NOTIFICATION ===== -->
-<div class="toast" id="toast"></div>
-
-<!-- ===== LOGIN PAGE ===== -->
-<div id="page-login" class="auth-page active">
-  <div class="auth-container">
-    <h2>🔐 Đăng nhập</h2>
-    <div id="login-alert"></div>
-    <div class="form-group">
-      <label>Tên đăng nhập</label>
-      <input type="text" id="login-username" placeholder="Nhập tên đăng nhập..." autocomplete="username">
-    </div>
-    <div class="form-group">
-      <label>Mật khẩu</label>
-      <input type="password" id="login-password" placeholder="Nhập mật khẩu..." autocomplete="current-password">
-    </div>
-    <div class="form-group checkbox-group">
-      <input type="checkbox" id="remember-me">
-      <label for="remember-me">Ghi nhớ đăng nhập (30 ngày)</label>
-    </div>
-    <button class="btn-submit" onclick="doLogin()">Đăng nhập</button>
-    <div class="auth-links">
-      Chưa có tài khoản? <a onclick="showPage('register')">Đăng ký ngay</a>
-    </div>
+<div id="view-login" class="view active">
+  <div class="auth-logo">⚡ TempMail Pro</div>
+  <div class="auth-card">
+    <div class="auth-title">🔐 Đăng nhập</div>
+    <div id="login-msg"></div>
+    <input class="form-input" id="login-user" type="text" placeholder="Tên đăng nhập">
+    <input class="form-input" id="login-pass" type="password" placeholder="Mật khẩu" style="margin-top:10px;">
+    <button class="btn btn-primary btn-full" onclick="doLogin()" style="margin-top:15px;">Đăng nhập</button>
   </div>
-  <div class="auth-footer">by <span>Lê Viết Tấn Khang</span> | Hỗ trợ: <span>0383376202</span></div>
+  <div class="auth-link-row" style="margin-top:20px;">Chưa có tài khoản? <a href="#" onclick="showView('register')">Đăng ký</a></div>
 </div>
 
-<!-- ===== REGISTER PAGE ===== -->
-<div id="page-register" class="auth-page">
-  <div class="auth-container">
-    <h2>📝 Đăng ký</h2>
-    <div id="register-alert"></div>
-    <div class="form-group">
-      <label>Tên đăng nhập</label>
-      <input type="text" id="reg-username" placeholder="Nhập tên đăng nhập..." autocomplete="username">
+<div id="view-register" class="view">
+    <div class="auth-logo">⚡ TempMail Pro</div>
+    <div class="auth-card">
+      <div class="auth-title">📝 Đăng ký</div>
+      <div id="reg-msg"></div>
+      <input class="form-input" id="reg-user" type="text" placeholder="Tên đăng nhập">
+      <input class="form-input" id="reg-pass" type="password" placeholder="Mật khẩu" style="margin-top:10px;">
+      <input class="form-input" id="reg-pass2" type="password" placeholder="Nhập lại mật khẩu" style="margin-top:10px;">
+      <button class="btn btn-primary btn-full" onclick="doRegister()" style="margin-top:15px;">Tạo tài khoản</button>
     </div>
-    <div class="form-group">
-      <label>Mật khẩu</label>
-      <input type="password" id="reg-password" placeholder="Ít nhất 6 ký tự..." autocomplete="new-password">
-    </div>
-    <div class="form-group">
-      <label>Xác nhận mật khẩu</label>
-      <input type="password" id="reg-confirm" placeholder="Nhập lại mật khẩu..." autocomplete="new-password">
-    </div>
-    <button class="btn-submit" onclick="doRegister()">Đăng ký</button>
-    <div class="auth-links">
-      Đã có tài khoản? <a onclick="showPage('login')">Đăng nhập</a>
-    </div>
-  </div>
-  <div class="auth-footer">by <span>Lê Viết Tấn Khang</span> | Hỗ trợ: <span>0383376202</span></div>
+    <div class="auth-link-row" style="margin-top:20px;">Đã có tài khoản? <a href="#" onclick="showView('login')">Đăng nhập</a></div>
 </div>
 
-<!-- ===== DASHBOARD PAGE ===== -->
-<div id="page-dashboard" class="page">
-  <div class="navbar">
-    <div style="display:flex;align-items:center;">
-      <button class="menu-toggle" onclick="toggleSidebar()" id="menu-toggle-btn">☰</button>
-      <div class="navbar-brand">⚡ TempMail</div>
-    </div>
-    <div class="navbar-user">
-      <span class="username-badge" id="nav-username">👤</span>
-      <span class="admin-badge" id="admin-badge" style="display:none;">👑 Admin</span>
-      <button class="logout-btn" onclick="doLogout()">Đăng xuất</button>
-    </div>
-  </div>
-
-  <div class="status-bar">
-    <span>🔐 <strong id="status-username"></strong></span>
-    <span class="online-status">Online</span>
-  </div>
-
-  <div class="dashboard-container">
-    <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
-      <h3 class="section-title">Email của tôi</h3>
-      <button class="btn btn-primary" onclick="createNewEmail()">✨ Tạo email mới</button>
-      <div style="margin-top:20px;">
-        <h4 style="color:#a0a0a0;margin-bottom:15px;font-size:0.95em;">Danh sách đã lưu</h4>
-        <ul class="email-list" id="emailList">
-          <li class="loading">Đang tải</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- Main -->
-    <div class="main-content">
-      <div class="header-actions">
-        <h3 class="section-title" style="margin-bottom:0;">Hộp thư đến</h3>
-        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-          <span class="current-email-badge" id="currentEmailDisplay">Chưa chọn email</span>
-          <button class="refresh-btn" onclick="checkMailbox()">⟳ Làm mới</button>
+<div id="view-dashboard" class="view">
+    <nav class="navbar">
+        <div class="nav-brand">⚡ TempMail</div>
+        <div class="navbar-right" style="display:flex; gap:15px; align-items:center;">
+            <div class="coin-badge" onclick="openCoinModal()">🪙 <span id="nav-coins">0</span> xu</div>
+            <span id="nav-username"></span>
+            <a href="#" onclick="doLogout()">Thoát</a>
         </div>
-      </div>
-      <div class="mailbox" id="mailbox">
-        <div class="empty-state">Chọn email từ danh sách</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="footer">
-    by <span>Lê Viết Tấn Khang</span> | Hỗ trợ: <span>0383376202</span>
-  </div>
-
-  <!-- Support FAB -->
-  <button class="support-fab" id="support-fab" onclick="openSupportChat()" title="Hỗ trợ">
-    💬
-    <span class="support-badge" id="support-badge" style="display:none;">!</span>
-  </button>
-</div>
-
-<!-- ===== ADMIN PANEL PAGE ===== -->
-<div id="page-admin" class="page">
-  <div class="navbar">
-    <div style="display:flex;align-items:center;">
-      <div class="navbar-brand">⚡ TempMail</div>
-    </div>
-    <div class="navbar-user">
-      <span class="username-badge">👑 Admin</span>
-      <button class="logout-btn" onclick="doLogout()">Đăng xuất</button>
-    </div>
-  </div>
-
-  <div class="admin-panel">
-    <div style="margin:20px 0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
-      <h2 style="color:#fff;font-size:1.5em;">🛠️ Bảng quản trị Admin</h2>
-      <button class="btn-secondary btn" style="width:auto;padding:10px 20px;" onclick="showPage('dashboard')">↩ Về Dashboard</button>
-    </div>
-
-    <div class="admin-tabs">
-      <button class="admin-tab active" onclick="showAdminTab('support')">💬 Hỗ trợ người dùng <span id="support-count-badge"></span></button>
-      <button class="admin-tab" onclick="showAdminTab('users')">👥 Danh sách tài khoản</button>
-      <button class="admin-tab" onclick="showAdminTab('info')">ℹ️ Thông tin hệ thống</button>
-    </div>
-
-    <!-- Support tab -->
-    <div id="tab-support" class="tab-content active">
-      <div class="admin-card">
-        <h3 class="section-title">Tin nhắn hỗ trợ</h3>
-        <div id="admin-support-list">
-          <div class="chat-empty">Chưa có tin nhắn hỗ trợ nào</div>
+    </nav>
+    <div class="main-layout">
+        <div class="sidebar">
+            <button class="btn btn-primary btn-full" onclick="createNewEmail()" id="create-btn">✨ Tạo email mới</button>
+            <ul id="emailList" style="margin-top:20px; list-style:none;"></ul>
         </div>
-      </div>
-    </div>
-
-    <!-- Users tab -->
-    <div id="tab-users" class="tab-content">
-      <div class="admin-card">
-        <h3 class="section-title">Danh sách tài khoản</h3>
-        <div style="overflow-x:auto;">
-          <table class="users-table">
-            <thead>
-              <tr>
-                <th>Tên đăng nhập</th>
-                <th>Ngày tạo</th>
-                <th>Đăng nhập cuối</th>
-              </tr>
-            </thead>
-            <tbody id="users-table-body">
-              <tr><td colspan="3" style="text-align:center;color:#606060;">Đang tải...</td></tr>
-            </tbody>
-          </table>
+        <div class="main-panel" style="position:relative;">
+            <div id="sub-lock-overlay" class="sub-lock" style="display:none;">
+                <h3>🔒 Cần kích hoạt gói</h3>
+                <button class="btn btn-primary" onclick="openCoinModal()">Mở quản lý xu</button>
+            </div>
+            <div id="main-panel-content">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h3 id="currentEmailDisplay">Hộp thư</h3>
+                    <button class="btn btn-primary btn-sm" onclick="checkMailbox()">Làm mới</button>
+                </div>
+                <div id="mailbox" style="margin-top:20px;"></div>
+            </div>
         </div>
-      </div>
     </div>
+</div>
 
-    <!-- Info tab -->
-    <div id="tab-info" class="tab-content">
-      <div class="admin-card">
-        <h3 class="section-title">Thông tin hệ thống</h3>
-        <div style="line-height:2;color:#a0a0a0;">
-          <p>👑 <strong style="color:#fff;">Admin:</strong> Lê Viết Tấn Khang</p>
-          <p>📞 <strong style="color:#fff;">SĐT:</strong> <span style="color:#10a37f;">0383376202</span></p>
-          <p>✉️ <strong style="color:#fff;">Dịch vụ email:</strong> mail.tm (API)</p>
-          <p>🔒 <strong style="color:#fff;">Bảo mật:</strong> SHA-256 password hashing</p>
-          <p>💾 <strong style="color:#fff;">Lưu trữ:</strong> LocalStorage (browser)</p>
-          <p>📅 <strong style="color:#fff;">Phiên bản:</strong> 2.1 (Fixed)</p>
+<div class="modal-overlay" id="modal-mail">
+    <div class="modal-box">
+        <h3 id="modal-mail-title"></h3>
+        <hr style="margin:15px 0; opacity:0.1;">
+        <div id="modal-mail-body"></div>
+        <button class="btn btn-primary" style="margin-top:20px;" onclick="closeModal('modal-mail')">Đóng</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="modal-coin">
+    <div class="modal-box">
+        <h3>🪙 Quản lý Xu & Gói</h3>
+        <p>Xu của bạn: <strong id="modal-coin-amount">0</strong></p>
+        <button class="btn btn-primary btn-full" onclick="collectCoins()" id="collect-btn" style="margin-top:10px;">Nhặt xu hàng ngày</button>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:20px;">
+            <button class="btn btn-primary" onclick="buyPlan('month', 10)">10 xu / Tháng</button>
+            <button class="btn btn-primary" onclick="buyPlan('year', 30)">30 xu / Năm</button>
         </div>
-      </div>
+        <button class="btn btn-full" style="margin-top:20px;" onclick="closeModal('modal-coin')">Đóng</button>
     </div>
-  </div>
 </div>
 
-<!-- ===== MODAL: VIEW MAIL CONTENT ===== -->
-<div class="modal" id="mailContentModal">
-  <div class="modal-content">
-    <div class="modal-title" id="mailModalTitle">Nội dung email</div>
-    <div class="modal-body" id="mailModalBody">
-      <div class="loading">Đang tải</div>
-    </div>
-    <div class="modal-buttons">
-      <button class="modal-btn close-btn" onclick="closeMailModal()">Đóng</button>
-    </div>
-  </div>
-</div>
-
-<!-- ===== MODAL: DELETE EMAIL ===== -->
-<div class="modal" id="deleteModal">
-  <div class="modal-content">
-    <div class="modal-title" style="color:#ef4444;">⚠️ Xác nhận xóa</div>
-    <p style="color:#e0e0e0;line-height:1.6;">Bạn có chắc muốn xóa email này khỏi danh sách lưu trữ?</p>
-    <div class="modal-buttons">
-      <button class="modal-btn cancel-btn" onclick="closeDeleteModal()">Hủy</button>
-      <button class="modal-btn confirm-btn" id="confirmDeleteBtn">🗑️ Xóa</button>
-    </div>
-  </div>
-</div>
-
-<!-- ===== MODAL: SUPPORT CHAT (User) ===== -->
-<div class="modal support-chat-modal" id="supportModal">
-  <div class="modal-content">
-    <div class="modal-title" style="display:flex;justify-content:space-between;align-items:center;">
-      <span>💬 Hỗ trợ - <span style="color:#10a37f;font-size:0.8em;">0383376202</span></span>
-      <button onclick="closeSupportModal()" style="background:none;border:none;color:#606060;font-size:1.3em;cursor:pointer;">✕</button>
-    </div>
-    <div class="chat-messages" id="chat-messages">
-      <div class="chat-empty">Gửi tin nhắn để nhận hỗ trợ từ admin</div>
-    </div>
-    <div class="chat-input-area">
-      <textarea id="support-input" placeholder="Nhập tin nhắn hỗ trợ..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendSupportMessage();}"></textarea>
-      <button class="chat-send-btn" onclick="sendSupportMessage()">➤</button>
-    </div>
-    <div style="text-align:center;margin-top:12px;font-size:0.8em;color:#505050;">
-      Admin Lê Viết Tấn Khang sẽ phản hồi sớm nhất có thể
-    </div>
-  </div>
-</div>
+<div class="toast-container" id="toast-container"></div>
 
 <script>
-// ============================================
-// CONSTANTS & CONFIG
-// ============================================
-const MAIL_API = 'https://api.mail.tm';
-const ADMIN_USER = 'tankhang';
-const ADMIN_PASS = 'leviettankhang';
+/**
+ * PHẦN FIX LỖI VÀ TỐI ƯU API
+ */
 
-const LS_USERS = 'tm_users';
-const LS_SESSION = 'tm_session';
-const LS_SUPPORT = 'tm_support';
-const LS_EMAIL_PREFIX = 'tm_emails_';
+const APIS = ['https://api.mail.gw', 'https://api.mail.tm'];
+// Danh sách proxy dự phòng mạnh mẽ hơn
+const PROXIES = [
+    '', // Thử trực tiếp trước
+    'https://api.allorigins.win/raw?url=',
+    'https://corsproxy.io/?',
+    'https://thingproxy.freeboard.io/fetch/',
+    'https://api.codetabs.com/v1/proxy/?quest='
+];
 
-let currentUser = null;
-let isAdmin = false;
-let currentEmail = null;
-let emailToDelete = null;
-let availableDomains = [];
+let currentApiIdx = 0;
 
-// ============================================
-// UTILS
-// ============================================
-async function sha256(text) {
-  const buf = new TextEncoder().encode(text);
-  const hash = await crypto.subtle.digest('SHA-256', buf);
-  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,'0')).join('');
-}
+// Hàm Fetch thông minh: Tự động thử qua nhiều Proxy nếu lỗi
+async function robustFetch(endpoint, options = {}) {
+    let lastError;
+    const fullUrl = APIS[currentApiIdx] + endpoint;
 
-function randomStr(len = 10) {
-  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-  return Array.from({length: len}, () => chars[Math.floor(Math.random() * chars.length)]).join('');
-}
+    for (let proxy of PROXIES) {
+        try {
+            const targetUrl = proxy ? proxy + encodeURIComponent(fullUrl) : fullUrl;
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 8000); // 8s timeout
 
-function showToast(msg, type='success') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = `toast toast-${type} show`;
-  setTimeout(() => { t.className = 'toast'; }, 3000);
-}
+            const response = await fetch(targetUrl, {
+                ...options,
+                signal: controller.signal,
+                headers: {
+                    ...options.headers,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
+            clearTimeout(timeoutId);
 
-function showAlert(id, msg, type='error') {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.innerHTML = `<div class="alert alert-${type}">${msg}</div>`;
-  setTimeout(() => { el.innerHTML = ''; }, 4000);
-}
-
-function formatDate(iso) {
-  if (!iso) return 'N/A';
-  try {
-    return new Date(iso).toLocaleString('vi-VN');
-  } catch { return iso; }
-}
-
-function escapeHtml(str) {
-  if (!str) return '';
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
-
-// ============================================
-// PAGE NAVIGATION
-// ============================================
-function showPage(name) {
-  document.querySelectorAll('.page, .auth-page').forEach(p => {
-    p.classList.remove('active');
-  });
-
-  const el = document.getElementById('page-' + name);
-  if (!el) return;
-  el.classList.add('active');
-
-  if (name === 'dashboard') {
-    renderDashboard();
-  } else if (name === 'admin') {
-    renderAdminPanel();
-  }
-}
-
-// ============================================
-// USER DB (localStorage)
-// ============================================
-function getUsers() {
-  try { return JSON.parse(localStorage.getItem(LS_USERS) || '{}'); }
-  catch { return {}; }
-}
-
-function saveUsers(users) {
-  localStorage.setItem(LS_USERS, JSON.stringify(users));
-}
-
-async function registerUser(username, password) {
-  if (!username || username.length < 3) return {ok:false, msg:'Tên đăng nhập phải từ 3 ký tự!'};
-  if (!password || password.length < 6) return {ok:false, msg:'Mật khẩu phải từ 6 ký tự!'};
-
-  if (username.toLowerCase() === ADMIN_USER) return {ok:false, msg:'Tên đăng nhập không khả dụng!'};
-
-  const users = getUsers();
-  if (users[username]) return {ok:false, msg:'Tên đăng nhập đã tồn tại!'};
-
-  const hash = await sha256(password);
-  users[username] = {
-    password: hash,
-    created_at: new Date().toISOString(),
-    last_login: null
-  };
-  saveUsers(users);
-  return {ok:true, msg:'Đăng ký thành công!'};
-}
-
-async function loginUser(username, password) {
-  if (username === ADMIN_USER) {
-    if (password === ADMIN_PASS) {
-      return {ok:true, msg:'Đăng nhập thành công!', admin:true};
+            if (response.ok || response.status === 201 || response.status === 422) {
+                return response;
+            }
+        } catch (e) {
+            lastError = e;
+            continue; // Thử proxy tiếp theo
+        }
     }
-    return {ok:false, msg:'Sai tên đăng nhập hoặc mật khẩu!'};
-  }
-
-  const users = getUsers();
-  if (!users[username]) return {ok:false, msg:'Tên đăng nhập không tồn tại!'};
-
-  const hash = await sha256(password);
-  if (users[username].password !== hash) return {ok:false, msg:'Sai mật khẩu!'};
-
-  users[username].last_login = new Date().toISOString();
-  saveUsers(users);
-  return {ok:true, msg:'Đăng nhập thành công!', admin:false};
-}
-
-function saveSession(username, admin, remember) {
-  const data = {username, admin, ts: Date.now(), remember};
-  if (remember) {
-    localStorage.setItem(LS_SESSION, JSON.stringify(data));
-  } else {
-    sessionStorage.setItem(LS_SESSION, JSON.stringify(data));
-  }
-}
-
-function loadSession() {
-  try {
-    const ls = localStorage.getItem(LS_SESSION);
-    if (ls) {
-      const d = JSON.parse(ls);
-      const age = (Date.now() - d.ts) / 1000 / 60 / 60 / 24;
-      if (age < 30) return d;
-      localStorage.removeItem(LS_SESSION);
+    
+    // Nếu tất cả proxy thất bại ở API 1, đổi sang API 2
+    if (currentApiIdx === 0) {
+        currentApiIdx = 1;
+        return robustFetch(endpoint, options);
     }
-    const ss = sessionStorage.getItem(LS_SESSION);
-    if (ss) return JSON.parse(ss);
-  } catch {}
-  return null;
+    
+    throw new Error("Không thể kết nối API. Hãy thử dùng VPN hoặc tải file về máy.");
 }
 
-function clearSession() {
-  localStorage.removeItem(LS_SESSION);
-  sessionStorage.removeItem(LS_SESSION);
+// Hàm lấy Domain (Fix lỗi không tạo được mail)
+async function getDomains() {
+    try {
+        const res = await robustFetch('/domains');
+        const data = await res.json();
+        return data['hydra:member'] || [];
+    } catch (err) {
+        toast("Lỗi lấy Domain: " + err.message, "error");
+        return [];
+    }
 }
 
-// ============================================
-// AUTH ACTIONS
-// ============================================
+// Hàm tạo Account
+async function createAccount(address, password) {
+    return robustFetch('/accounts', {
+        method: 'POST',
+        body: JSON.stringify({ address, password })
+    });
+}
+
+// Hàm lấy Token
+async function getTokenApi(address, password) {
+    const res = await robustFetch('/token', {
+        method: 'POST',
+        body: JSON.stringify({ address, password })
+    });
+    const data = await res.json();
+    return data.token;
+}
+
+// [LOGIC QUẢN LÝ EMAIL]
+async function createNewEmail() {
+    const user = getSessionUser();
+    if (!isSubActive(user)) return toast("Bạn cần kích hoạt gói!", "error");
+
+    const btn = document.getElementById('create-btn');
+    btn.disabled = true; btn.innerText = "Đang tạo...";
+
+    try {
+        const domains = await getDomains();
+        if (domains.length === 0) throw new Error("Không có domain khả dụng");
+
+        const domain = domains[0].domain;
+        const username = 'tk' + Math.random().toString(36).substring(2, 10);
+        const address = `${username}@${domain}`;
+        const password = 'Pass' + Math.random().toString(36);
+
+        const regRes = await createAccount(address, password);
+        if (!regRes.ok) throw new Error("Server từ chối tạo mail");
+
+        const token = await getTokenApi(address, password);
+        
+        // Lưu vào máy
+        const saved = getUserEmails(user.username);
+        saved[address] = { address, password, token, createdAt: new Date() };
+        saveUserEmails(user.username, saved);
+
+        toast("Đã tạo: " + address, "success");
+        loadEmails();
+    } catch (err) {
+        toast("Lỗi: " + err.message, "error");
+    } finally {
+        btn.disabled = false; btn.innerText = "✨ Tạo email mới";
+    }
+}
+
+// Hàm kiểm tra Mailbox (Fix lỗi không nhận được mã)
+async function checkMailbox() {
+    if (!window.currentSelectedEmail) return;
+    const mailbox = document.getElementById('mailbox');
+    
+    try {
+        const user = getSessionUser();
+        const emailData = getUserEmails(user.username)[window.currentSelectedEmail];
+        
+        const res = await robustFetch('/messages', {
+            headers: { 'Authorization': `Bearer ${emailData.token}` }
+        });
+
+        if (res.status === 401) { // Token hết hạn, tự refresh
+            const newToken = await getTokenApi(emailData.address, emailData.password);
+            emailData.token = newToken;
+            const saved = getUserEmails(user.username);
+            saved[window.currentSelectedEmail] = emailData;
+            saveUserEmails(user.username, saved);
+            return checkMailbox(); 
+        }
+
+        const data = await res.json();
+        const msgs = data['hydra:member'] || [];
+
+        if (msgs.length === 0) {
+            mailbox.innerHTML = `<div style="text-align:center; padding:40px; color:#546272;">
+                <p>Hộp thư trống...</p>
+                <small>Đang tự động kiểm tra sau mỗi 5 giây</small>
+            </div>`;
+        } else {
+            mailbox.innerHTML = msgs.map(m => `
+                <div class="mail-item" onclick="viewMail('${m.id}')">
+                    <div style="color:var(--accent); font-weight:bold;">${m.from.address}</div>
+                    <div style="margin:5px 0;">${m.subject}</div>
+                    <small style="color:var(--text3);">${new Date(m.createdAt).toLocaleTimeString()}</small>
+                </div>
+            `).join('');
+        }
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+// Xem chi tiết mail
+async function viewMail(id) {
+    const user = getSessionUser();
+    const emailData = getUserEmails(user.username)[window.currentSelectedEmail];
+    openModal('modal-mail');
+    document.getElementById('modal-mail-body').innerHTML = "Đang tải nội dung...";
+
+    try {
+        const res = await robustFetch('/messages/' + id, {
+            headers: { 'Authorization': `Bearer ${emailData.token}` }
+        });
+        const data = await res.json();
+        document.getElementById('modal-mail-title').innerText = data.subject;
+        document.getElementById('modal-mail-body').innerHTML = data.html || data.text;
+    } catch (err) {
+        document.getElementById('modal-mail-body').innerText = "Lỗi tải mail.";
+    }
+}
+
+// Auto-refresh mỗi 5 giây khi người dùng đang ở dashboard
+setInterval(() => {
+    if (document.getElementById('view-dashboard').classList.contains('active')) {
+        checkMailbox();
+    }
+}, 5000);
+
+// --- CÁC HÀM TIỆN ÍCH GIỮ NGUYÊN TỪ BẢN GỐC ---
+function getSessionUser() {
+    const session = JSON.parse(sessionStorage.getItem('tempmail_session') || localStorage.getItem('tempmail_remember') || '{}');
+    const users = JSON.parse(localStorage.getItem('tempmail_users_v2') || '{}');
+    return users[session.username];
+}
+
+function getUserEmails(uname) { return JSON.parse(localStorage.getItem('tm_emails_'+uname) || '{}'); }
+function saveUserEmails(uname, data) { localStorage.setItem('tm_emails_'+uname, JSON.stringify(data)); }
+
+function isSubActive(user) {
+    if(!user || !user.subscription.active) return false;
+    return new Date(user.subscription.expiresAt) > new Date();
+}
+
+function loadEmails() {
+    const user = getSessionUser();
+    const emails = Object.values(getUserEmails(user.username));
+    const list = document.getElementById('emailList');
+    list.innerHTML = emails.map(e => `
+        <li class="email-item" onclick="window.currentSelectedEmail='${e.address}'; loadEmails(); checkMailbox();">
+            <strong>${e.address}</strong>
+        </li>
+    `).join('');
+    
+    // Highlight email đang chọn
+    Array.from(list.children).forEach(li => {
+        if(li.innerText.includes(window.currentSelectedEmail)) li.classList.add('active');
+    });
+}
+
+function toast(m, type="info") {
+    const t = document.createElement('div');
+    t.className = `toast ${type}`;
+    t.innerText = m;
+    document.getElementById('toast-container').appendChild(t);
+    setTimeout(() => t.remove(), 3000);
+}
+
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// Khởi tạo Login/Register (Giữ nguyên logic của bạn nhưng bọc lại)
 async function doLogin() {
-  const username = document.getElementById('login-username').value.trim();
-  const password = document.getElementById('login-password').value;
-  const remember = document.getElementById('remember-me').checked;
-
-  if (!username || !password) {
-    showAlert('login-alert', 'Vui lòng nhập đầy đủ thông tin!');
-    return;
-  }
-
-  const result = await loginUser(username, password);
-  if (!result.ok) {
-    showAlert('login-alert', result.msg);
-    return;
-  }
-
-  currentUser = username;
-  isAdmin = result.admin;
-  saveSession(username, isAdmin, remember);
-
-  if (isAdmin) {
-    showPage('admin');
-  } else {
-    showPage('dashboard');
-  }
+    const u = document.getElementById('login-user').value;
+    const p = document.getElementById('login-pass').value;
+    const users = JSON.parse(localStorage.getItem('tempmail_users_v2') || '{}');
+    if(users[u]) {
+        sessionStorage.setItem('tempmail_session', JSON.stringify({username: u}));
+        showDashboard(u);
+    } else { toast("Sai tài khoản!", "error"); }
 }
 
-async function doRegister() {
-  const username = document.getElementById('reg-username').value.trim();
-  const password = document.getElementById('reg-password').value;
-  const confirm = document.getElementById('reg-confirm').value;
+function doRegister() {
+    const u = document.getElementById('reg-user').value;
+    const p = document.getElementById('reg-pass').value;
+    const users = JSON.parse(localStorage.getItem('tempmail_users_v2') || '{}');
+    users[u] = { username: u, password: p, coins: 10, subscription: {active: false}, createdAt: new Date() };
+    localStorage.setItem('tempmail_users_v2', JSON.stringify(users));
+    toast("Đăng ký xong! Nhận 10 xu.", "success");
+    showView('login');
+}
 
-  if (!username || !password || !confirm) {
-    showAlert('register-alert', 'Vui lòng nhập đầy đủ thông tin!');
-    return;
-  }
+function showDashboard(uname) {
+    showView('dashboard');
+    document.getElementById('nav-username').innerText = uname;
+    const user = getSessionUser();
+    document.getElementById('nav-coins').innerText = user.coins;
+    document.getElementById('sub-lock-overlay').style.display = isSubActive(user) ? 'none' : 'flex';
+    loadEmails();
+}
 
-  if (password !== confirm) {
-    showAlert('register-alert', 'Mật khẩu xác nhận không khớp!');
-    return;
-  }
-
-  const result = await registerUser(username, password);
-  if (!result.ok) {
-    showAlert('register-alert', result.msg);
-    return;
-  }
-
-  showAlert('register-alert', result.msg, 'success');
-  setTimeout(() => showPage('login'), 1200);
+function showView(v) {
+    document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+    document.getElementById('view-'+v).classList.add('active');
 }
 
 function doLogout() {
-  currentUser = null;
-  isAdmin = false;
-  currentEmail = null;
-  clearSession();
-  showPage('login');
+    sessionStorage.clear();
+    localStorage.removeItem('tempmail_remember');
+    location.reload();
 }
 
-// ============================================
-// EMAIL STORAGE (per user)
-// ============================================
-function getEmails(username) {
-  try { return JSON.parse(localStorage.getItem(LS_EMAIL_PREFIX + username) || '[]'); }
-  catch { return []; }
+// Quản lý xu
+function collectCoins() {
+    const user = getSessionUser();
+    const users = JSON.parse(localStorage.getItem('tempmail_users_v2'));
+    users[user.username].coins += 2;
+    localStorage.setItem('tempmail_users_v2', JSON.stringify(users));
+    toast("Bạn nhận được 2 xu!", "success");
+    showDashboard(user.username);
 }
 
-function saveEmails(username, emails) {
-  localStorage.setItem(LS_EMAIL_PREFIX + username, JSON.stringify(emails));
+function buyPlan(type, price) {
+    const user = getSessionUser();
+    const users = JSON.parse(localStorage.getItem('tempmail_users_v2'));
+    if(user.coins >= price) {
+        users[user.username].coins -= price;
+        let date = new Date();
+        if(type === 'month') date.setMonth(date.getMonth() + 1);
+        else date.setFullYear(date.getFullYear() + 1);
+        users[user.username].subscription = { active: true, expiresAt: date };
+        localStorage.setItem('tempmail_users_v2', JSON.stringify(users));
+        toast("Kích hoạt thành công!", "success");
+        closeModal('modal-coin');
+        showDashboard(user.username);
+    } else { toast("Không đủ xu!", "error"); }
 }
 
-function getEmailData(username, address) {
-  const emails = getEmails(username);
-  return emails.find(e => e.address === address) || null;
+function openCoinModal() {
+    const user = getSessionUser();
+    document.getElementById('modal-coin-amount').innerText = user.coins;
+    openModal('modal-coin');
 }
 
-function updateEmailLastUsed(username, address) {
-  const emails = getEmails(username);
-  const idx = emails.findIndex(e => e.address === address);
-  if (idx >= 0) {
-    emails[idx].last_used = new Date().toISOString();
-    saveEmails(username, emails);
-  }
-}
-
-// ============================================
-// MAIL.TM API (FIXED)
-// ============================================
-async function getMailTmDomains() {
-  if (availableDomains.length > 0) return availableDomains;
-  try {
-    const res = await fetch(`${MAIL_API}/domains?page=1`, {
-      headers: { 'Accept': 'application/ld+json' }
-    });
-    const data = await res.json();
-    availableDomains = (data['hydra:member'] || []).map(d => d.domain);
-    if (availableDomains.length === 0) availableDomains = ['mail.tm']; // fallback
-    return availableDomains;
-  } catch(e) {
-    console.error('Lỗi lấy domains:', e);
-    return ['mail.tm'];
-  }
-}
-
-async function createMailTmAccount(address, password) {
-  try {
-    const res = await fetch(`${MAIL_API}/accounts`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/ld+json'
-      },
-      body: JSON.stringify({address, password})
-    });
-    if (res.status === 201) {
-      const data = await res.json();
-      return {ok:true, id:data.id};
-    }
-    const err = await res.json();
-    return {ok:false, msg: err['hydra:description'] || 'Lỗi tạo tài khoản'};
-  } catch(e) {
-    console.error('Lỗi tạo tài khoản:', e);
-    return {ok:false, msg:'Lỗi kết nối mạng'};
-  }
-}
-
-async function getMailTmToken(address, password) {
-  try {
-    const res = await fetch(`${MAIL_API}/token`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/ld+json'
-      },
-      body: JSON.stringify({address, password})
-    });
-    if (res.ok) {
-      const data = await res.json();
-      return {ok:true, token:data.token, id:data.id};
-    }
-    return {ok:false, msg:'Xác thực thất bại'};
-  } catch(e) {
-    console.error('Lỗi lấy token:', e);
-    return {ok:false, msg:'Lỗi kết nối'};
-  }
-}
-
-async function ensureToken(emailEntry) {
-  // Nếu có token, thử dùng để lấy messages
-  if (emailEntry.token) {
-    try {
-      const res = await fetch(`${MAIL_API}/messages?page=1`, {
-        headers: {
-          'Authorization': `Bearer ${emailEntry.token}`,
-          'Accept': 'application/ld+json'
-        }
-      });
-      if (res.ok) return emailEntry.token;
-      // Nếu lỗi 401 thì refresh token
-      if (res.status === 401) {
-        console.log('Token hết hạn, đang refresh...');
-      }
-    } catch(e) {
-      console.warn('Lỗi khi kiểm tra token:', e);
-    }
-  }
-
-  // Refresh token
-  const r = await getMailTmToken(emailEntry.address, emailEntry.password);
-  if (r.ok) {
-    const emails = getEmails(currentUser);
-    const idx = emails.findIndex(e => e.address === emailEntry.address);
-    if (idx >= 0) {
-      emails[idx].token = r.token;
-      saveEmails(currentUser, emails);
-    }
-    return r.token;
-  }
-  return null;
-}
-
-// ============================================
-// DASHBOARD ACTIONS
-// ============================================
-function renderDashboard() {
-  document.getElementById('nav-username').textContent = '👤 ' + currentUser;
-  document.getElementById('status-username').textContent = currentUser;
-
-  const adminBadge = document.getElementById('admin-badge');
-  adminBadge.style.display = isAdmin ? 'inline' : 'none';
-
-  if (window.innerWidth <= 768) {
-    document.getElementById('menu-toggle-btn').style.display = 'block';
-  } else {
-    document.getElementById('menu-toggle-btn').style.display = 'none';
-  }
-
-  loadEmails();
-  checkSupportBadge();
-}
-
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('show');
-}
-
-async function loadEmails() {
-  const emails = getEmails(currentUser);
-  renderEmailList(emails);
-}
-
-function renderEmailList(emails) {
-  const emailList = document.getElementById('emailList');
-
-  if (emails.length === 0) {
-    emailList.innerHTML = '<li class="empty-state" style="padding:20px 0;font-size:0.9em;">Chưa có email nào</li>';
-    return;
-  }
-
-  emailList.innerHTML = emails.map(email => {
-    const created = formatDate(email.created_at);
-    const lastUsed = formatDate(email.last_used);
-    const isActive = currentEmail === email.address;
-    return `
-      <li class="email-item ${isActive ? 'active' : ''}" onclick="selectEmail('${email.address}', this)">
-        <div class="email-address">${escapeHtml(email.address)}</div>
-        <button class="copy-btn" onclick="event.stopPropagation();copyToClipboard('${email.address}')">📋 Sao chép</button>
-        <div class="email-meta">
-          <div>📅 Tạo: ${created}</div>
-          <div>⏰ Dùng: ${lastUsed}</div>
-        </div>
-        <button class="btn btn-danger" style="margin-top:12px;"
-                onclick="event.stopPropagation();showDeleteModal('${email.address}')">🗑️ Xóa</button>
-      </li>
-    `;
-  }).join('');
-}
-
-async function createNewEmail() {
-  showToast('Đang tạo email mới...', 'success');
-
-  const domains = await getMailTmDomains();
-  if (!domains || domains.length === 0) {
-    showToast('Không thể lấy danh sách domain!', 'error');
-    return;
-  }
-
-  const domain = domains[0];
-  const localPart = randomStr(10);
-  const address = `${localPart}@${domain}`;
-  const password = randomStr(16);
-
-  console.log('Đang tạo email:', address);
-
-  const createResult = await createMailTmAccount(address, password);
-  if (!createResult.ok) {
-    showToast('❌ ' + (createResult.msg || 'Không thể tạo email'), 'error');
-    return;
-  }
-
-  // Quan trọng: chờ server kích hoạt tài khoản
-  await new Promise(resolve => setTimeout(resolve, 1500));
-
-  const tokenResult = await getMailTmToken(address, password);
-  if (!tokenResult.ok) {
-    showToast('❌ Không lấy được token!', 'error');
-    return;
-  }
-
-  const emails = getEmails(currentUser);
-  emails.unshift({
-    address,
-    password,
-    token: tokenResult.token,
-    created_at: new Date().toISOString(),
-    last_used: new Date().toISOString()
-  });
-  saveEmails(currentUser, emails);
-
-  showToast('✅ Tạo email thành công!', 'success');
-  await loadEmails();
-  await selectEmail(address, null);
-}
-
-async function selectEmail(address, itemEl) {
-  currentEmail = address;
-  document.getElementById('currentEmailDisplay').textContent = address;
-
-  document.querySelectorAll('.email-item').forEach(el => el.classList.remove('active'));
-  if (itemEl) itemEl.classList.add('active');
-
-  updateEmailLastUsed(currentUser, address);
-
-  if (window.innerWidth <= 768) {
-    document.getElementById('sidebar').classList.remove('show');
-  }
-
-  await checkMailbox();
-}
-
-async function checkMailbox() {
-  if (!currentEmail) {
-    showToast('Vui lòng chọn email!', 'error');
-    return;
-  }
-
-  const mailbox = document.getElementById('mailbox');
-  mailbox.innerHTML = '<div class="loading">Đang kiểm tra</div>';
-
-  const emailEntry = getEmailData(currentUser, currentEmail);
-  if (!emailEntry) {
-    mailbox.innerHTML = '<div class="empty-state">❌ Không tìm thấy dữ liệu email</div>';
-    return;
-  }
-
-  const token = await ensureToken(emailEntry);
-  if (!token) {
-    mailbox.innerHTML = '<div class="empty-state">❌ Phiên đăng nhập email hết hạn. Hãy xóa và tạo lại email.</div>';
-    return;
-  }
-
-  try {
-    const res = await fetch(`${MAIL_API}/messages?page=1`, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Accept': 'application/ld+json'
-      }
-    });
-
-    if (!res.ok) {
-      console.error('Lỗi API messages:', res.status);
-      mailbox.innerHTML = '<div class="empty-state">❌ Không thể kiểm tra hộp thư</div>';
-      return;
-    }
-
-    const data = await res.json();
-    const mails = data['hydra:member'] || [];
-
-    if (mails.length === 0) {
-      mailbox.innerHTML = '<div class="empty-state">Hộp thư trống</div>';
-      return;
-    }
-
-    mailbox.innerHTML = mails.map(mail => {
-      const from = mail.from ? (mail.from.name || mail.from.address || 'Unknown') : 'Unknown';
-      const time = formatDate(mail.createdAt);
-      const unread = !mail.seen ? '🔵 ' : '';
-      return `
-        <div class="mail-item" onclick="showMailContent('${mail.id}')">
-          <div class="mail-sender">📧 ${unread}${escapeHtml(from)}</div>
-          <div class="mail-subject">📝 ${escapeHtml(mail.subject || '(Không có tiêu đề)')}</div>
-          <div class="mail-time">${time}</div>
-          ${mail.intro ? `<div style="color:#808080;font-size:0.85em;margin-top:6px;">${escapeHtml(mail.intro.substring(0,100))}${mail.intro.length > 100 ? '...' : ''}</div>` : ''}
-        </div>
-      `;
-    }).join('');
-
-  } catch(e) {
-    console.error('Lỗi kiểm tra mailbox:', e);
-    mailbox.innerHTML = '<div class="empty-state">❌ Lỗi kết nối</div>';
-  }
-}
-
-async function showMailContent(mailId) {
-  document.getElementById('mailModalTitle').textContent = 'Đang tải...';
-  document.getElementById('mailModalBody').innerHTML = '<div class="loading">Đang tải</div>';
-  document.getElementById('mailContentModal').classList.add('show');
-
-  const emailEntry = getEmailData(currentUser, currentEmail);
-  if (!emailEntry) {
-    document.getElementById('mailModalBody').innerHTML = '<div class="empty-state">❌ Lỗi dữ liệu email</div>';
-    return;
-  }
-
-  const token = await ensureToken(emailEntry);
-  if (!token) {
-    document.getElementById('mailModalBody').innerHTML = '<div class="empty-state">❌ Token hết hạn</div>';
-    return;
-  }
-
-  try {
-    const res = await fetch(`${MAIL_API}/messages/${mailId}`, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Accept': 'application/ld+json'
-      }
-    });
-
-    if (!res.ok) {
-      document.getElementById('mailModalBody').innerHTML = '<div class="empty-state">❌ Không thể tải nội dung email</div>';
-      return;
-    }
-
-    const mail = await res.json();
-    document.getElementById('mailModalTitle').textContent = mail.subject || '(Không có tiêu đề)';
-
-    const from = mail.from ? (mail.from.name ? `${mail.from.name} &lt;${mail.from.address}&gt;` : mail.from.address) : 'Unknown';
-    const time = formatDate(mail.createdAt);
-
-    // Cải thiện regex tìm OTP
-    const textContent = mail.text || '';
-    const otpMatch = textContent.match(/(?:OTP|code|mã|verification|mã xác nhận|mã kích hoạt)\D*(\d{4,8})/i) || textContent.match(/\b(\d{4,8})\b/);
-    let otpHtml = '';
-    if (otpMatch) {
-      otpHtml = `
-        <div class="mail-otp" title="Click để sao chép" onclick="copyToClipboard('${otpMatch[1]}')" style="cursor:pointer;">
-          🔑 ${otpMatch[1]} <span style="font-size:0.5em;opacity:0.7;">(Click để sao chép)</span>
-        </div>
-      `;
-    }
-
-    let htmlContent = '';
-    if (mail.html && mail.html.length > 0) {
-      const htmlStr = Array.isArray(mail.html) ? mail.html.join('') : mail.html;
-      htmlContent = `<div class="mail-content" style="max-height:400px;overflow-y:auto;">${htmlStr}</div>`;
-    } else if (mail.text) {
-      htmlContent = `<div class="mail-content" style="white-space:pre-wrap;">${escapeHtml(mail.text)}</div>`;
-    }
-
-    document.getElementById('mailModalBody').innerHTML = `
-      <div style="background:#0d0d0d;border-radius:12px;padding:14px;margin-bottom:16px;font-size:0.9em;">
-        <div style="margin-bottom:6px;"><strong style="color:#a0a0a0;">Từ:</strong> <span style="color:#10a37f;">${escapeHtml(from)}</span></div>
-        <div><strong style="color:#a0a0a0;">Thời gian:</strong> <span style="color:#e0e0e0;">${time}</span></div>
-      </div>
-      ${otpHtml}
-      ${htmlContent}
-    `;
-
-  } catch(e) {
-    console.error('Lỗi tải nội dung mail:', e);
-    document.getElementById('mailModalBody').innerHTML = '<div class="empty-state">❌ Lỗi kết nối</div>';
-  }
-}
-
-function closeMailModal() {
-  document.getElementById('mailContentModal').classList.remove('show');
-}
-
-function showDeleteModal(email) {
-  emailToDelete = email;
-  document.getElementById('deleteModal').classList.add('show');
-}
-
-function closeDeleteModal() {
-  document.getElementById('deleteModal').classList.remove('show');
-  emailToDelete = null;
-}
-
-document.getElementById('confirmDeleteBtn').onclick = function() {
-  if (!emailToDelete) return;
-  const emails = getEmails(currentUser).filter(e => e.address !== emailToDelete);
-  saveEmails(currentUser, emails);
-
-  if (currentEmail === emailToDelete) {
-    currentEmail = null;
-    document.getElementById('currentEmailDisplay').textContent = 'Chưa chọn email';
-    document.getElementById('mailbox').innerHTML = '<div class="empty-state">Chọn email từ danh sách</div>';
-  }
-
-  showToast('✅ Đã xóa email', 'success');
-  loadEmails();
-  closeDeleteModal();
+// Kiểm tra session khi load
+window.onload = () => {
+    const u = getSessionUser();
+    if(u) showDashboard(u.username);
 };
-
-function copyToClipboard(text) {
-  navigator.clipboard.writeText(text).then(() => {
-    showToast('📋 Đã sao chép!', 'success');
-  }).catch(() => {
-    const el = document.createElement('textarea');
-    el.value = text;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
-    showToast('📋 Đã sao chép!', 'success');
-  });
-}
-
-// ============================================
-// SUPPORT SYSTEM
-// ============================================
-function getSupportMessages() {
-  try { return JSON.parse(localStorage.getItem(LS_SUPPORT) || '[]'); }
-  catch { return []; }
-}
-
-function saveSupportMessages(msgs) {
-  localStorage.setItem(LS_SUPPORT, JSON.stringify(msgs));
-}
-
-function openSupportChat() {
-  if (isAdmin) {
-    showPage('admin');
-    return;
-  }
-  renderSupportChat();
-  document.getElementById('supportModal').classList.add('show');
-}
-
-function closeSupportModal() {
-  document.getElementById('supportModal').classList.remove('show');
-}
-
-function renderSupportChat() {
-  const msgs = getSupportMessages().filter(m => m.from_user === currentUser);
-  const chatEl = document.getElementById('chat-messages');
-
-  if (msgs.length === 0) {
-    chatEl.innerHTML = '<div class="chat-empty">Gửi tin nhắn để nhận hỗ trợ từ admin</div>';
-    return;
-  }
-
-  chatEl.innerHTML = msgs.map(msg => `
-    <div style="margin-bottom:12px;">
-      <div class="chat-bubble bubble-user">
-        ${escapeHtml(msg.message)}
-        <div class="bubble-time">${formatDate(msg.timestamp)}</div>
-      </div>
-      ${msg.reply ? `
-        <div class="chat-bubble bubble-admin" style="margin-top:8px;">
-          ${escapeHtml(msg.reply)}
-          <div class="bubble-time">Admin • ${formatDate(msg.reply_time)}</div>
-        </div>
-      ` : `<div style="font-size:0.8em;color:#505050;margin-top:4px;margin-left:4px;">⏳ Đang chờ phản hồi...</div>`}
-    </div>
-  `).join('');
-
-  chatEl.scrollTop = chatEl.scrollHeight;
-}
-
-function sendSupportMessage() {
-  const input = document.getElementById('support-input');
-  const msg = input.value.trim();
-  if (!msg) return;
-
-  const msgs = getSupportMessages();
-  msgs.push({
-    id: Date.now().toString(),
-    from_user: currentUser,
-    message: msg,
-    timestamp: new Date().toISOString(),
-    read: false,
-    reply: null,
-    reply_time: null
-  });
-  saveSupportMessages(msgs);
-
-  input.value = '';
-  renderSupportChat();
-  showToast('✅ Đã gửi tin nhắn!', 'success');
-}
-
-function checkSupportBadge() {
-  if (isAdmin) return;
-  const msgs = getSupportMessages().filter(m => m.from_user === currentUser && m.reply && !m.reply_read);
-  const badge = document.getElementById('support-badge');
-  if (msgs.length > 0) {
-    badge.style.display = 'flex';
-    badge.textContent = msgs.length;
-  } else {
-    badge.style.display = 'none';
-  }
-}
-
-// ============================================
-// ADMIN PANEL
-// ============================================
-function showAdminTab(tab) {
-  document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-
-  // Find clicked tab
-  event.currentTarget.classList.add('active');
-  document.getElementById('tab-' + tab).classList.add('active');
-
-  if (tab === 'support') renderAdminSupport();
-  if (tab === 'users') renderAdminUsers();
-}
-
-function renderAdminPanel() {
-  renderAdminSupport();
-}
-
-function renderAdminSupport() {
-  const msgs = getSupportMessages();
-  const listEl = document.getElementById('admin-support-list');
-  const countEl = document.getElementById('support-count-badge');
-
-  const unreadCount = msgs.filter(m => !m.read).length;
-  countEl.textContent = unreadCount > 0 ? ` (${unreadCount})` : '';
-
-  if (msgs.length === 0) {
-    listEl.innerHTML = '<div class="chat-empty">Chưa có tin nhắn hỗ trợ nào</div>';
-    return;
-  }
-
-  const byUser = {};
-  msgs.forEach(m => {
-    if (!byUser[m.from_user]) byUser[m.from_user] = [];
-    byUser[m.from_user].push(m);
-  });
-
-  listEl.innerHTML = Object.entries(byUser).map(([user, userMsgs]) => {
-    const hasUnread = userMsgs.some(m => !m.read);
-    return `
-      <div class="support-msg-card ${hasUnread ? 'unread' : ''}">
-        <div class="support-msg-header">
-          <span class="support-msg-from">👤 ${escapeHtml(user)}</span>
-          <span style="font-size:0.8em;color:#10a37f;">${userMsgs.length} tin nhắn</span>
-        </div>
-        ${userMsgs.map(msg => `
-          <div style="margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #1e1e1e;">
-            <div class="support-msg-text">${escapeHtml(msg.message)}</div>
-            <div class="support-msg-time">${formatDate(msg.timestamp)}</div>
-            ${msg.reply
-              ? `<div class="reply-text">${escapeHtml(msg.reply)}</div>`
-              : `
-                <div class="support-reply-box">
-                  <textarea id="reply-${msg.id}" placeholder="Nhập phản hồi..."></textarea>
-                  <button class="btn btn-primary" style="width:auto;padding:8px 16px;margin-top:8px;font-size:0.9em;"
-                          onclick="sendAdminReply('${msg.id}','${escapeHtml(user)}')">📤 Gửi phản hồi</button>
-                </div>
-              `}
-          </div>
-        `).join('')}
-      </div>
-    `;
-  }).join('');
-
-  // Mark all as read
-  const updated = msgs.map(m => ({...m, read: true}));
-  saveSupportMessages(updated);
-}
-
-function sendAdminReply(msgId, username) {
-  const replyEl = document.getElementById(`reply-${msgId}`);
-  if (!replyEl) return;
-  const reply = replyEl.value.trim();
-  if (!reply) { showToast('Vui lòng nhập nội dung phản hồi!', 'error'); return; }
-
-  const msgs = getSupportMessages();
-  const idx = msgs.findIndex(m => m.id === msgId);
-  if (idx >= 0) {
-    msgs[idx].reply = reply;
-    msgs[idx].reply_time = new Date().toISOString();
-    msgs[idx].reply_read = false;
-    saveSupportMessages(msgs);
-    showToast('✅ Đã gửi phản hồi tới ' + username, 'success');
-    renderAdminSupport();
-  }
-}
-
-function renderAdminUsers() {
-  const users = getUsers();
-  const tbody = document.getElementById('users-table-body');
-
-  const entries = Object.entries(users);
-  if (entries.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#606060;">Chưa có tài khoản nào</td></tr>';
-    return;
-  }
-
-  tbody.innerHTML = entries.map(([username, data]) => `
-    <tr>
-      <td>👤 ${escapeHtml(username)}</td>
-      <td>${formatDate(data.created_at)}</td>
-      <td>${formatDate(data.last_login)}</td>
-    </tr>
-  `).join('');
-}
-
-// ============================================
-// AUTO REFRESH
-// ============================================
-setInterval(() => {
-  if (currentUser && currentEmail && document.getElementById('page-dashboard').classList.contains('active')) {
-    checkMailbox();
-  }
-}, 30000);
-
-setInterval(() => {
-  if (currentUser) checkSupportBadge();
-}, 60000);
-
-// ============================================
-// MODAL CLOSE ON OUTSIDE CLICK
-// ============================================
-window.onclick = function(event) {
-  ['mailContentModal', 'deleteModal', 'supportModal'].forEach(id => {
-    const modal = document.getElementById(id);
-    if (event.target === modal) modal.classList.remove('show');
-  });
-};
-
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') {
-    closeMailModal();
-    closeDeleteModal();
-    closeSupportModal();
-  }
-});
-
-// ENTER key on login
-document.getElementById('login-password').addEventListener('keydown', e => {
-  if (e.key === 'Enter') doLogin();
-});
-document.getElementById('login-username').addEventListener('keydown', e => {
-  if (e.key === 'Enter') doLogin();
-});
-document.getElementById('reg-confirm').addEventListener('keydown', e => {
-  if (e.key === 'Enter') doRegister();
-});
-
-// ============================================
-// BOOT - Check session on load
-// ============================================
-(function init() {
-  const session = loadSession();
-  if (session) {
-    currentUser = session.username;
-    isAdmin = session.admin || false;
-    if (isAdmin) {
-      showPage('admin');
-    } else {
-      showPage('dashboard');
-    }
-  } else {
-    showPage('login');
-  }
-})();
 </script>
 </body>
 </html>
