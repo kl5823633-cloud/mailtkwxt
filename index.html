@@ -5,27 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>TempMail</title>
   <style>
+    /* CSS giữ nguyên như cũ, không thay đổi để đảm bảo giao diện */
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
       background: #0a0a0a;
       color: #e0e0e0;
       min-height: 100vh;
     }
-
     ::-webkit-scrollbar { width: 8px; height: 8px; }
     ::-webkit-scrollbar-track { background: #1a1a1a; }
     ::-webkit-scrollbar-thumb { background: #3a3a3a; border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: #4a4a4a; }
-
-    /* ========== PAGES ========== */
     .page { display: none; min-height: 100vh; }
     .page.active { display: block; }
     .auth-page { display: none; flex-direction: column; justify-content: center; align-items: center; }
     .auth-page.active { display: flex; }
-
-    /* ========== AUTH STYLES ========== */
     .auth-container {
       background: #1a1a1a;
       border-radius: 20px;
@@ -35,7 +30,6 @@
       padding: 40px;
       border: 1px solid #2a2a2a;
     }
-
     .auth-container h2 {
       text-align: center;
       color: #fff;
@@ -44,9 +38,7 @@
       font-weight: 500;
       letter-spacing: -0.5px;
     }
-
     .form-group { margin-bottom: 20px; }
-
     .form-group label {
       display: block;
       margin-bottom: 8px;
@@ -55,7 +47,6 @@
       font-size: 0.9em;
       letter-spacing: 0.3px;
     }
-
     .form-group input[type="text"],
     .form-group input[type="password"] {
       width: 100%;
@@ -67,26 +58,22 @@
       transition: all 0.3s;
       color: #fff;
     }
-
     .form-group input:focus {
       outline: none;
       border-color: #10a37f;
       background: #000;
       box-shadow: 0 0 0 2px rgba(16, 163, 127, 0.2);
     }
-
     .checkbox-group {
       display: flex;
       align-items: center;
       gap: 10px;
     }
-
     .checkbox-group input[type="checkbox"] {
       width: 18px;
       height: 18px;
       accent-color: #10a37f;
     }
-
     .btn-submit {
       width: 100%;
       padding: 14px;
@@ -100,27 +87,22 @@
       transition: all 0.3s;
       margin-top: 10px;
     }
-
     .btn-submit:hover {
       background: #0d8b6c;
       transform: translateY(-1px);
       box-shadow: 0 10px 25px rgba(16, 163, 127, 0.3);
     }
-
     .auth-links {
       text-align: center;
       margin-top: 25px;
     }
-
     .auth-links a {
       color: #10a37f;
       text-decoration: none;
       font-size: 0.95em;
       cursor: pointer;
     }
-
     .auth-links a:hover { color: #0d8b6c; text-decoration: underline; }
-
     .alert {
       padding: 12px;
       border-radius: 12px;
@@ -128,20 +110,16 @@
       text-align: center;
       font-size: 0.95em;
     }
-
     .alert-error {
       background: rgba(220, 38, 38, 0.1);
       color: #ef4444;
       border: 1px solid rgba(239, 68, 68, 0.2);
     }
-
     .alert-success {
       background: rgba(16, 163, 127, 0.1);
       color: #10a37f;
       border: 1px solid rgba(16, 163, 127, 0.2);
     }
-
-    /* ========== FOOTER ========== */
     .footer {
       text-align: center;
       padding: 20px;
@@ -150,19 +128,14 @@
       border-top: 1px solid #2a2a2a;
       margin-top: 30px;
     }
-
     .footer span { color: #10a37f; }
-
     .auth-footer {
       margin-top: 20px;
       text-align: center;
       color: #404040;
       font-size: 0.9em;
     }
-
     .auth-footer span { color: #10a37f; }
-
-    /* ========== NAVBAR ========== */
     .navbar {
       background: #1a1a1a;
       padding: 16px 24px;
@@ -176,7 +149,6 @@
       top: 0;
       z-index: 100;
     }
-
     .navbar-brand {
       font-size: 1.4em;
       font-weight: 600;
@@ -185,14 +157,12 @@
       -webkit-text-fill-color: transparent;
       letter-spacing: -0.5px;
     }
-
     .navbar-user {
       display: flex;
       align-items: center;
       gap: 15px;
       flex-wrap: wrap;
     }
-
     .username-badge {
       background: #2a2a2a;
       padding: 6px 14px;
@@ -201,7 +171,6 @@
       color: #e0e0e0;
       border: 1px solid #3a3a3a;
     }
-
     .admin-badge {
       background: rgba(234, 179, 8, 0.15);
       color: #eab308;
@@ -211,7 +180,6 @@
       font-size: 0.8em;
       font-weight: 600;
     }
-
     .logout-btn {
       background: #2a2a2a;
       color: #ff6b6b;
@@ -223,9 +191,7 @@
       border: 1px solid #3a3a3a;
       cursor: pointer;
     }
-
     .logout-btn:hover { background: #3a3a3a; color: #ff5252; }
-
     .menu-toggle {
       display: none;
       background: #2a2a2a;
@@ -237,8 +203,6 @@
       margin-right: 15px;
       cursor: pointer;
     }
-
-    /* ========== STATUS BAR ========== */
     .status-bar {
       background: #0d0d0d;
       padding: 12px 24px;
@@ -249,7 +213,6 @@
       border-bottom: 1px solid #1e1e1e;
       max-width: 100%;
     }
-
     .online-status {
       color: #10a37f;
       font-weight: 500;
@@ -257,18 +220,14 @@
       align-items: center;
       gap: 5px;
     }
-
     .online-status::before {
       content: '●';
       animation: pulse 2s infinite;
     }
-
     @keyframes pulse {
       0%, 100% { opacity: 1; }
       50% { opacity: 0.5; }
     }
-
-    /* ========== DASHBOARD LAYOUT ========== */
     .dashboard-container {
       max-width: 1600px;
       margin: 24px auto;
@@ -277,7 +236,6 @@
       grid-template-columns: 350px 1fr;
       gap: 24px;
     }
-
     .sidebar {
       background: #1a1a1a;
       border-radius: 20px;
@@ -286,7 +244,6 @@
       border: 1px solid #2a2a2a;
       height: fit-content;
     }
-
     .main-content {
       background: #1a1a1a;
       border-radius: 20px;
@@ -295,7 +252,6 @@
       border: 1px solid #2a2a2a;
       min-height: 600px;
     }
-
     .section-title {
       color: #fff;
       margin-bottom: 20px;
@@ -305,14 +261,11 @@
       font-weight: 500;
       letter-spacing: -0.3px;
     }
-
     .section-title::before {
       content: '▍';
       color: #10a37f;
       margin-right: 8px;
     }
-
-    /* ========== BUTTONS ========== */
     .btn {
       padding: 12px 20px;
       border: none;
@@ -325,34 +278,27 @@
       font-size: 1em;
       letter-spacing: 0.3px;
     }
-
     .btn-primary {
       background: #10a37f;
       color: white;
     }
-
     .btn-primary:hover {
       background: #0d8b6c;
       transform: translateY(-2px);
       box-shadow: 0 10px 25px rgba(16, 163, 127, 0.3);
     }
-
     .btn-danger {
       background: #2a2a2a;
       color: #ff6b6b;
       border: 1px solid #3a3a3a;
     }
-
     .btn-danger:hover { background: #3a3a3a; color: #ff5252; }
-
     .btn-secondary {
       background: #2a2a2a;
       color: #a0a0a0;
       border: 1px solid #3a3a3a;
     }
-
     .btn-secondary:hover { background: #3a3a3a; }
-
     .refresh-btn {
       background: #2a2a2a;
       color: #10a37f;
@@ -363,17 +309,13 @@
       font-size: 0.9em;
       transition: all 0.3s;
     }
-
     .refresh-btn:hover { background: #3a3a3a; border-color: #10a37f; }
-
-    /* ========== EMAIL LIST ========== */
     .email-list {
       list-style: none;
       max-height: 500px;
       overflow-y: auto;
       padding-right: 5px;
     }
-
     .email-item {
       padding: 16px;
       background: #0d0d0d;
@@ -383,19 +325,16 @@
       cursor: pointer;
       transition: all 0.3s;
     }
-
     .email-item:hover {
       border-color: #10a37f;
       transform: translateY(-2px);
       box-shadow: 0 5px 15px rgba(16, 163, 127, 0.1);
     }
-
     .email-item.active {
       border-color: #10a37f;
       background: #0f0f0f;
       box-shadow: 0 0 0 1px #10a37f;
     }
-
     .email-address {
       font-weight: 600;
       color: #fff;
@@ -403,14 +342,12 @@
       font-size: 0.95em;
       margin-bottom: 8px;
     }
-
     .email-meta {
       font-size: 0.85em;
       color: #808080;
       margin-top: 8px;
       line-height: 1.5;
     }
-
     .copy-btn {
       background: #1e1e1e;
       color: #10a37f;
@@ -422,12 +359,8 @@
       margin-top: 8px;
       transition: all 0.2s;
     }
-
     .copy-btn:hover { background: #2a2a2a; }
-
-    /* ========== MAILBOX ========== */
     .mailbox { min-height: 500px; }
-
     .mail-item {
       padding: 16px;
       background: #0d0d0d;
@@ -437,27 +370,23 @@
       cursor: pointer;
       transition: all 0.3s;
     }
-
     .mail-item:hover {
       border-color: #10a37f;
       transform: translateY(-2px);
       box-shadow: 0 5px 15px rgba(16, 163, 127, 0.1);
     }
-
     .mail-sender {
       font-weight: 600;
       color: #10a37f;
       font-size: 1em;
       margin-bottom: 6px;
     }
-
     .mail-subject {
       color: #e0e0e0;
       margin: 8px 0;
       font-size: 0.95em;
       line-height: 1.5;
     }
-
     .mail-time {
       font-size: 0.8em;
       color: #808080;
@@ -465,16 +394,13 @@
       align-items: center;
       gap: 5px;
     }
-
     .mail-time::before { content: '⏱️'; opacity: 0.7; }
-
     .empty-state {
       text-align: center;
       padding: 60px 20px;
       color: #505050;
       font-size: 1.1em;
     }
-
     .empty-state::before {
       content: '📭';
       display: block;
@@ -482,25 +408,20 @@
       margin-bottom: 15px;
       opacity: 0.5;
     }
-
     .loading {
       text-align: center;
       padding: 40px;
       color: #10a37f;
     }
-
     .loading::after {
       content: '...';
       animation: dots 1.5s steps(4, end) infinite;
     }
-
     @keyframes dots {
       0%, 20% { content: '.'; }
       40% { content: '..'; }
       60%, 100% { content: '...'; }
     }
-
-    /* ========== HEADER ACTIONS ========== */
     .header-actions {
       display: flex;
       justify-content: space-between;
@@ -509,7 +430,6 @@
       flex-wrap: wrap;
       gap: 15px;
     }
-
     .current-email-badge {
       background: #0d0d0d;
       padding: 8px 16px;
@@ -520,10 +440,7 @@
       word-break: break-all;
       border: 1px solid #2a2a2a;
     }
-
     .current-email-badge::before { content: '📬 '; opacity: 0.7; }
-
-    /* ========== MODALS ========== */
     .modal {
       display: none;
       position: fixed;
@@ -535,9 +452,7 @@
       align-items: center;
       z-index: 1000;
     }
-
     .modal.show { display: flex; }
-
     .modal-content {
       background: #1a1a1a;
       padding: 30px;
@@ -549,7 +464,6 @@
       border: 1px solid #2a2a2a;
       box-shadow: 0 25px 50px rgba(0,0,0,0.5);
     }
-
     .modal-title {
       font-size: 1.3em;
       font-weight: 600;
@@ -558,21 +472,17 @@
       padding-bottom: 12px;
       border-bottom: 1px solid #2a2a2a;
     }
-
     .modal-title::before { content: '📧'; margin-right: 10px; }
-
     .modal-body {
       margin-bottom: 25px;
       color: #e0e0e0;
       line-height: 1.6;
     }
-
     .modal-buttons {
       display: flex;
       gap: 12px;
       margin-top: 25px;
     }
-
     .modal-btn {
       flex: 1;
       padding: 12px;
@@ -583,15 +493,12 @@
       font-size: 0.95em;
       transition: all 0.3s;
     }
-
     .close-btn { background: #2a2a2a; color: #e0e0e0; border: 1px solid #3a3a3a; }
     .close-btn:hover { background: #3a3a3a; }
     .confirm-btn { background: #ef4444; color: white; }
     .confirm-btn:hover { background: #dc2626; }
     .cancel-btn { background: #2a2a2a; color: #e0e0e0; border: 1px solid #3a3a3a; }
     .cancel-btn:hover { background: #3a3a3a; }
-
-    /* ========== MAIL CONTENT ========== */
     .mail-content { font-family: inherit; line-height: 1.6; }
     .mail-content img { max-width: 100%; height: auto; border-radius: 8px; }
     .mail-content table { max-width: 100%; overflow-x: auto; display: block; border-collapse: collapse; }
@@ -609,14 +516,11 @@
       letter-spacing: 4px;
       border: 1px dashed #10a37f;
     }
-
-    /* ========== ADMIN PANEL ========== */
     .admin-panel {
       max-width: 1200px;
       margin: 24px auto;
       padding: 0 20px;
     }
-
     .admin-card {
       background: #1a1a1a;
       border-radius: 20px;
@@ -625,14 +529,12 @@
       border: 1px solid #2a2a2a;
       margin-bottom: 24px;
     }
-
     .admin-tabs {
       display: flex;
       gap: 12px;
       margin-bottom: 24px;
       flex-wrap: wrap;
     }
-
     .admin-tab {
       padding: 10px 20px;
       border-radius: 12px;
@@ -643,18 +545,14 @@
       font-size: 0.95em;
       transition: all 0.3s;
     }
-
     .admin-tab.active {
       background: #10a37f;
       color: white;
       border-color: #10a37f;
     }
-
     .admin-tab:hover:not(.active) { background: #2a2a2a; color: #fff; }
-
     .tab-content { display: none; }
     .tab-content.active { display: block; }
-
     .support-msg-card {
       background: #0d0d0d;
       border: 1px solid #2a2a2a;
@@ -662,32 +560,25 @@
       padding: 16px;
       margin-bottom: 12px;
     }
-
     .support-msg-card.unread { border-color: #10a37f; }
-
     .support-msg-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 10px;
     }
-
     .support-msg-from {
       font-weight: 600;
       color: #10a37f;
       font-size: 0.95em;
     }
-
     .support-msg-time { font-size: 0.8em; color: #606060; }
-
     .support-msg-text {
       color: #e0e0e0;
       line-height: 1.5;
       margin-bottom: 12px;
     }
-
     .support-reply-box { margin-top: 12px; }
-
     .support-reply-box textarea {
       width: 100%;
       padding: 10px 14px;
@@ -700,12 +591,10 @@
       resize: vertical;
       min-height: 60px;
     }
-
     .support-reply-box textarea:focus {
       outline: none;
       border-color: #10a37f;
     }
-
     .reply-text {
       background: rgba(16, 163, 127, 0.08);
       border: 1px solid rgba(16, 163, 127, 0.2);
@@ -715,15 +604,12 @@
       color: #10a37f;
       font-size: 0.9em;
     }
-
     .reply-text::before { content: '↩ Admin: '; font-weight: bold; }
-
     .users-table {
       width: 100%;
       border-collapse: collapse;
       font-size: 0.95em;
     }
-
     .users-table th {
       background: #0d0d0d;
       color: #a0a0a0;
@@ -731,16 +617,12 @@
       text-align: left;
       font-weight: 500;
     }
-
     .users-table td {
       padding: 12px 16px;
       border-bottom: 1px solid #1e1e1e;
       color: #e0e0e0;
     }
-
     .users-table tr:hover td { background: #0f0f0f; }
-
-    /* ========== SUPPORT CHAT (user side) ========== */
     .support-fab {
       position: fixed;
       bottom: 24px;
@@ -760,13 +642,11 @@
       justify-content: center;
       z-index: 500;
     }
-
     .support-fab:hover {
       background: #0d8b6c;
       transform: scale(1.1);
       box-shadow: 0 8px 25px rgba(16, 163, 127, 0.5);
     }
-
     .support-badge {
       position: absolute;
       top: -4px;
@@ -782,18 +662,15 @@
       justify-content: center;
       font-weight: bold;
     }
-
     .support-chat-modal .modal-content {
       max-width: 480px;
     }
-
     .chat-messages {
       max-height: 320px;
       overflow-y: auto;
       padding: 8px 0;
       margin-bottom: 16px;
     }
-
     .chat-bubble {
       padding: 10px 14px;
       border-radius: 14px;
@@ -802,33 +679,28 @@
       line-height: 1.5;
       font-size: 0.92em;
     }
-
     .bubble-user {
       background: #10a37f;
       color: white;
       margin-left: auto;
       border-radius: 14px 14px 4px 14px;
     }
-
     .bubble-admin {
       background: #2a2a2a;
       color: #e0e0e0;
       margin-right: auto;
       border-radius: 14px 14px 14px 4px;
     }
-
     .bubble-time {
       font-size: 0.75em;
       opacity: 0.6;
       margin-top: 4px;
     }
-
     .chat-input-area {
       display: flex;
       gap: 8px;
       align-items: flex-end;
     }
-
     .chat-input-area textarea {
       flex: 1;
       padding: 10px 14px;
@@ -841,12 +713,10 @@
       resize: none;
       height: 44px;
     }
-
     .chat-input-area textarea:focus {
       outline: none;
       border-color: #10a37f;
     }
-
     .chat-send-btn {
       padding: 10px 16px;
       background: #10a37f;
@@ -858,17 +728,13 @@
       transition: all 0.3s;
       height: 44px;
     }
-
     .chat-send-btn:hover { background: #0d8b6c; }
-
     .chat-empty {
       text-align: center;
       padding: 30px;
       color: #505050;
       font-size: 0.9em;
     }
-
-    /* ========== NOTIFICATION ========== */
     .toast {
       position: fixed;
       top: 80px;
@@ -885,12 +751,9 @@
       transition: transform 0.3s ease;
       max-width: 300px;
     }
-
     .toast.show { transform: translateX(0); }
     .toast.toast-success { border-color: #10a37f; color: #10a37f; }
     .toast.toast-error { border-color: #ef4444; color: #ef4444; }
-
-    /* ========== RESPONSIVE ========== */
     @media (max-width: 768px) {
       .dashboard-container {
         grid-template-columns: 1fr;
@@ -898,7 +761,6 @@
         padding: 12px;
         gap: 12px;
       }
-
       .sidebar {
         position: fixed;
         left: -100%;
@@ -910,19 +772,12 @@
         border-radius: 0 20px 20px 0;
         overflow-y: auto;
       }
-
       .sidebar.show { left: 0; }
-
       .menu-toggle { display: block; }
-
       .navbar { padding: 12px 16px; }
-
       .header-actions { flex-direction: column; align-items: flex-start; }
-
       .modal-content { padding: 20px; width: 95%; }
-
       .admin-panel { padding: 0 12px; margin: 12px auto; }
-
       .support-fab { bottom: 16px; right: 16px; }
     }
   </style>
@@ -1105,7 +960,7 @@
           <p>✉️ <strong style="color:#fff;">Dịch vụ email:</strong> mail.tm (API)</p>
           <p>🔒 <strong style="color:#fff;">Bảo mật:</strong> SHA-256 password hashing</p>
           <p>💾 <strong style="color:#fff;">Lưu trữ:</strong> LocalStorage (browser)</p>
-          <p>📅 <strong style="color:#fff;">Phiên bản:</strong> 2.0 (HTML Edition)</p>
+          <p>📅 <strong style="color:#fff;">Phiên bản:</strong> 2.1 (Fixed)</p>
         </div>
       </div>
     </div>
@@ -1211,11 +1066,19 @@ function formatDate(iso) {
   } catch { return iso; }
 }
 
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
 // ============================================
 // PAGE NAVIGATION
 // ============================================
 function showPage(name) {
-  // Hide all
   document.querySelectorAll('.page, .auth-page').forEach(p => {
     p.classList.remove('active');
   });
@@ -1247,7 +1110,6 @@ async function registerUser(username, password) {
   if (!username || username.length < 3) return {ok:false, msg:'Tên đăng nhập phải từ 3 ký tự!'};
   if (!password || password.length < 6) return {ok:false, msg:'Mật khẩu phải từ 6 ký tự!'};
 
-  // Admin is hardcoded, can't be registered
   if (username.toLowerCase() === ADMIN_USER) return {ok:false, msg:'Tên đăng nhập không khả dụng!'};
 
   const users = getUsers();
@@ -1264,7 +1126,6 @@ async function registerUser(username, password) {
 }
 
 async function loginUser(username, password) {
-  // Admin check (hardcoded)
   if (username === ADMIN_USER) {
     if (password === ADMIN_PASS) {
       return {ok:true, msg:'Đăng nhập thành công!', admin:true};
@@ -1402,16 +1263,20 @@ function updateEmailLastUsed(username, address) {
 }
 
 // ============================================
-// MAIL.TM API
+// MAIL.TM API (FIXED)
 // ============================================
 async function getMailTmDomains() {
   if (availableDomains.length > 0) return availableDomains;
   try {
-    const res = await fetch(`${MAIL_API}/domains?page=1`);
+    const res = await fetch(`${MAIL_API}/domains?page=1`, {
+      headers: { 'Accept': 'application/ld+json' }
+    });
     const data = await res.json();
     availableDomains = (data['hydra:member'] || []).map(d => d.domain);
+    if (availableDomains.length === 0) availableDomains = ['mail.tm']; // fallback
     return availableDomains;
-  } catch {
+  } catch(e) {
+    console.error('Lỗi lấy domains:', e);
     return ['mail.tm'];
   }
 }
@@ -1420,7 +1285,10 @@ async function createMailTmAccount(address, password) {
   try {
     const res = await fetch(`${MAIL_API}/accounts`, {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/ld+json'
+      },
       body: JSON.stringify({address, password})
     });
     if (res.status === 201) {
@@ -1430,6 +1298,7 @@ async function createMailTmAccount(address, password) {
     const err = await res.json();
     return {ok:false, msg: err['hydra:description'] || 'Lỗi tạo tài khoản'};
   } catch(e) {
+    console.error('Lỗi tạo tài khoản:', e);
     return {ok:false, msg:'Lỗi kết nối mạng'};
   }
 }
@@ -1438,7 +1307,10 @@ async function getMailTmToken(address, password) {
   try {
     const res = await fetch(`${MAIL_API}/token`, {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/ld+json'
+      },
       body: JSON.stringify({address, password})
     });
     if (res.ok) {
@@ -1446,25 +1318,35 @@ async function getMailTmToken(address, password) {
       return {ok:true, token:data.token, id:data.id};
     }
     return {ok:false, msg:'Xác thực thất bại'};
-  } catch {
+  } catch(e) {
+    console.error('Lỗi lấy token:', e);
     return {ok:false, msg:'Lỗi kết nối'};
   }
 }
 
 async function ensureToken(emailEntry) {
-  // Check if token still works by doing a quick test
+  // Nếu có token, thử dùng để lấy messages
   if (emailEntry.token) {
     try {
       const res = await fetch(`${MAIL_API}/messages?page=1`, {
-        headers: {'Authorization': `Bearer ${emailEntry.token}`}
+        headers: {
+          'Authorization': `Bearer ${emailEntry.token}`,
+          'Accept': 'application/ld+json'
+        }
       });
       if (res.ok) return emailEntry.token;
-    } catch {}
+      // Nếu lỗi 401 thì refresh token
+      if (res.status === 401) {
+        console.log('Token hết hạn, đang refresh...');
+      }
+    } catch(e) {
+      console.warn('Lỗi khi kiểm tra token:', e);
+    }
   }
-  // Re-authenticate
+
+  // Refresh token
   const r = await getMailTmToken(emailEntry.address, emailEntry.password);
   if (r.ok) {
-    // Update stored token
     const emails = getEmails(currentUser);
     const idx = emails.findIndex(e => e.address === emailEntry.address);
     if (idx >= 0) {
@@ -1484,15 +1366,11 @@ function renderDashboard() {
   document.getElementById('status-username').textContent = currentUser;
 
   const adminBadge = document.getElementById('admin-badge');
-  if (isAdmin) {
-    adminBadge.style.display = 'inline';
-  } else {
-    adminBadge.style.display = 'none';
-  }
+  adminBadge.style.display = isAdmin ? 'inline' : 'none';
 
-  // Mobile check
-  const isMobile = window.innerWidth <= 768;
-  if (!isMobile) {
+  if (window.innerWidth <= 768) {
+    document.getElementById('menu-toggle-btn').style.display = 'block';
+  } else {
     document.getElementById('menu-toggle-btn').style.display = 'none';
   }
 
@@ -1523,7 +1401,7 @@ function renderEmailList(emails) {
     const isActive = currentEmail === email.address;
     return `
       <li class="email-item ${isActive ? 'active' : ''}" onclick="selectEmail('${email.address}', this)">
-        <div class="email-address">${email.address}</div>
+        <div class="email-address">${escapeHtml(email.address)}</div>
         <button class="copy-btn" onclick="event.stopPropagation();copyToClipboard('${email.address}')">📋 Sao chép</button>
         <div class="email-meta">
           <div>📅 Tạo: ${created}</div>
@@ -1550,11 +1428,16 @@ async function createNewEmail() {
   const address = `${localPart}@${domain}`;
   const password = randomStr(16);
 
+  console.log('Đang tạo email:', address);
+
   const createResult = await createMailTmAccount(address, password);
   if (!createResult.ok) {
     showToast('❌ ' + (createResult.msg || 'Không thể tạo email'), 'error');
     return;
   }
+
+  // Quan trọng: chờ server kích hoạt tài khoản
+  await new Promise(resolve => setTimeout(resolve, 1500));
 
   const tokenResult = await getMailTmToken(address, password);
   if (!tokenResult.ok) {
@@ -1616,10 +1499,14 @@ async function checkMailbox() {
 
   try {
     const res = await fetch(`${MAIL_API}/messages?page=1`, {
-      headers: {'Authorization': `Bearer ${token}`}
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/ld+json'
+      }
     });
 
     if (!res.ok) {
+      console.error('Lỗi API messages:', res.status);
       mailbox.innerHTML = '<div class="empty-state">❌ Không thể kiểm tra hộp thư</div>';
       return;
     }
@@ -1647,6 +1534,7 @@ async function checkMailbox() {
     }).join('');
 
   } catch(e) {
+    console.error('Lỗi kiểm tra mailbox:', e);
     mailbox.innerHTML = '<div class="empty-state">❌ Lỗi kết nối</div>';
   }
 }
@@ -1670,7 +1558,10 @@ async function showMailContent(mailId) {
 
   try {
     const res = await fetch(`${MAIL_API}/messages/${mailId}`, {
-      headers: {'Authorization': `Bearer ${token}`}
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/ld+json'
+      }
     });
 
     if (!res.ok) {
@@ -1684,9 +1575,9 @@ async function showMailContent(mailId) {
     const from = mail.from ? (mail.from.name ? `${mail.from.name} &lt;${mail.from.address}&gt;` : mail.from.address) : 'Unknown';
     const time = formatDate(mail.createdAt);
 
-    // Try to detect OTP code
+    // Cải thiện regex tìm OTP
     const textContent = mail.text || '';
-    const otpMatch = textContent.match(/\b(\d{4,8})\b/);
+    const otpMatch = textContent.match(/(?:OTP|code|mã|verification|mã xác nhận|mã kích hoạt)\D*(\d{4,8})/i) || textContent.match(/\b(\d{4,8})\b/);
     let otpHtml = '';
     if (otpMatch) {
       otpHtml = `
@@ -1696,7 +1587,6 @@ async function showMailContent(mailId) {
       `;
     }
 
-    // Sanitize HTML content
     let htmlContent = '';
     if (mail.html && mail.html.length > 0) {
       const htmlStr = Array.isArray(mail.html) ? mail.html.join('') : mail.html;
@@ -1707,7 +1597,7 @@ async function showMailContent(mailId) {
 
     document.getElementById('mailModalBody').innerHTML = `
       <div style="background:#0d0d0d;border-radius:12px;padding:14px;margin-bottom:16px;font-size:0.9em;">
-        <div style="margin-bottom:6px;"><strong style="color:#a0a0a0;">Từ:</strong> <span style="color:#10a37f;">${from}</span></div>
+        <div style="margin-bottom:6px;"><strong style="color:#a0a0a0;">Từ:</strong> <span style="color:#10a37f;">${escapeHtml(from)}</span></div>
         <div><strong style="color:#a0a0a0;">Thời gian:</strong> <span style="color:#e0e0e0;">${time}</span></div>
       </div>
       ${otpHtml}
@@ -1715,6 +1605,7 @@ async function showMailContent(mailId) {
     `;
 
   } catch(e) {
+    console.error('Lỗi tải nội dung mail:', e);
     document.getElementById('mailModalBody').innerHTML = '<div class="empty-state">❌ Lỗi kết nối</div>';
   }
 }
@@ -1753,7 +1644,6 @@ function copyToClipboard(text) {
   navigator.clipboard.writeText(text).then(() => {
     showToast('📋 Đã sao chép!', 'success');
   }).catch(() => {
-    // Fallback
     const el = document.createElement('textarea');
     el.value = text;
     document.body.appendChild(el);
@@ -1762,15 +1652,6 @@ function copyToClipboard(text) {
     document.body.removeChild(el);
     showToast('📋 Đã sao chép!', 'success');
   });
-}
-
-function escapeHtml(str) {
-  if (!str) return '';
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
 }
 
 // ============================================
@@ -1866,6 +1747,7 @@ function showAdminTab(tab) {
   document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
 
+  // Find clicked tab
   event.currentTarget.classList.add('active');
   document.getElementById('tab-' + tab).classList.add('active');
 
@@ -1890,7 +1772,6 @@ function renderAdminSupport() {
     return;
   }
 
-  // Group by user
   const byUser = {};
   msgs.forEach(m => {
     if (!byUser[m.from_user]) byUser[m.from_user] = [];
@@ -1975,7 +1856,6 @@ setInterval(() => {
   }
 }, 30000);
 
-// Keep-alive equivalent (no-op in client-only app)
 setInterval(() => {
   if (currentUser) checkSupportBadge();
 }, 60000);
