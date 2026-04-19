@@ -709,11 +709,8 @@ async function checkSessionAndRedirect(username, rememberMe) {
   try {
     const resp = await fetch('/api/emails');
     const data = await resp.json();
-    // Nếu không bị chặn (không có lỗi 'login_required') thì session hợp lệ
     if (data.success !== undefined || resp.status === 200) {
-      // Session valid
       setSession({ username }, rememberMe);
-      // Ensure user in localStorage coin system
       const users = getUsers();
       if (!users[username]) {
         users[username] = {
@@ -750,14 +747,11 @@ async function doRegister() {
     formData.append('username', username);
     formData.append('password', password);
     formData.append('confirm_password', pass2);
-    // Gửi đăng ký
     await fetch('/register', { method: 'POST', body: formData });
-    // Kiểm tra session đã được tạo chưa bằng cách gọi API yêu cầu đăng nhập
     const success = await checkSessionAndRedirect(username, false);
     if (success) {
       showMsg(msgEl, 'success', '🎉 Đăng ký thành công! Bạn nhận được 10 xu. Đang chuyển hướng...');
     } else {
-      // Có thể Flask không tự động login, thử login thủ công
       const loginForm = new FormData();
       loginForm.append('username', username);
       loginForm.append('password', password);
@@ -782,7 +776,6 @@ async function doLogin() {
 
   if (!username || !password) { showMsg(msgEl, 'error', 'Vui lòng nhập đầy đủ thông tin!'); return; }
 
-  // Admin shortcut
   if (username === 'tankhang' && password === 'leviettankhang') {
     setSession({ username: 'tankhang', isAdmin: true }, rememberMe);
     showAdminPanel();
