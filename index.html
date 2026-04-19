@@ -3,430 +3,1401 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>TempMail Pro V3 – by Lê Viết Tấn Khang</title>
+<title>TempMail Pro – by Lê Viết Tấn Khang</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-/* ... (Giữ nguyên phần Style của bạn đã cung cấp) ... */
-:root{--bg:#080c10;--bg2:#0e1318;--bg3:#141a22;--surface:#19202a;--surface2:#1f2836;--border:#232d3a;--border2:#2a3545;--accent:#00d4a0;--accent2:#00b589;--accent-glow:rgba(0,212,160,0.18);--text:#e2eaf4;--text2:#8da0b4;--text3:#546272;--danger:#ff4b6e;--warn:#f59e0b;--coin:#fbbf24;--radius:14px;--radius-sm:8px;--shadow:0 8px 32px rgba(0,0,0,0.5);}
+/* ===== RESET & BASE ===== */
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#080c10;
+  --bg2:#0e1318;
+  --bg3:#141a22;
+  --surface:#19202a;
+  --surface2:#1f2836;
+  --border:#232d3a;
+  --border2:#2a3545;
+  --accent:#00d4a0;
+  --accent2:#00b589;
+  --accent-glow:rgba(0,212,160,0.18);
+  --text:#e2eaf4;
+  --text2:#8da0b4;
+  --text3:#546272;
+  --danger:#ff4b6e;
+  --warn:#f59e0b;
+  --coin:#fbbf24;
+  --radius:14px;
+  --radius-sm:8px;
+  --shadow:0 8px 32px rgba(0,0,0,0.5);
+}
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden;}
-.view{display:none;min-height:100vh;}.view.active{display:flex;}
-#view-login,#view-register{flex-direction:column;justify-content:center;align-items:center;background:radial-gradient(ellipse at 50% 0%,rgba(0,212,160,0.08) 0%,transparent 65%),var(--bg);padding:20px;}
-.auth-logo{font-family:'Space Mono',monospace;font-size:1.7em;font-weight:700;color:var(--accent);letter-spacing:-1px;margin-bottom:8px;text-align:center;}
-.auth-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:36px 32px;width:100%;max-width:400px;box-shadow:0 24px 64px rgba(0,0,0,0.6);}
-.form-group{margin-bottom:18px;}.form-input{width:100%;padding:13px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);color:#fff;outline:none;}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 20px;border:none;border-radius:var(--radius-sm);font-weight:600;cursor:pointer;transition:all 0.25s;}
-.btn-primary{background:var(--accent);color:#000;}.btn-full{width:100%;}
-.navbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;backdrop-filter:blur(12px);}
-.main-layout{display:grid;grid-template-columns:320px 1fr;gap:20px;padding:20px;max-width:1600px;margin:0 auto;width:100%;flex:1;}
-.sidebar{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;height:fit-content;}
-.main-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;min-height:540px;}
-.email-item{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;cursor:pointer;}
-.email-item.active{border-color:var(--accent);background:rgba(0,212,160,0.04);}
-.mail-item{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:10px;cursor:pointer;}
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);justify-content:center;align-items:center;z-index:500;}
-.modal-overlay.open{display:flex;}.modal-box{background:var(--surface);border-radius:18px;padding:28px;width:90%;max-width:560px;max-height:82vh;overflow-y:auto;}
-.sub-lock{position:absolute;inset:0;background:rgba(8,12,16,0.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:50;text-align:center;}
+::-webkit-scrollbar{width:6px;height:6px;}
+::-webkit-scrollbar-track{background:var(--bg2);}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+
+/* ===== VIEWS ===== */
+.view{display:none;min-height:100vh;}
+.view.active{display:flex;}
+
+/* ===== AUTH PAGES ===== */
+#view-login,#view-register{
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  background:radial-gradient(ellipse at 50% 0%,rgba(0,212,160,0.08) 0%,transparent 65%),var(--bg);
+  padding:20px;
+}
+.auth-logo{
+  font-family:'Space Mono',monospace;
+  font-size:1.7em;
+  font-weight:700;
+  color:var(--accent);
+  letter-spacing:-1px;
+  margin-bottom:8px;
+  text-align:center;
+}
+.auth-sub{color:var(--text3);font-size:0.88em;text-align:center;margin-bottom:32px;}
+.auth-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:36px 32px;
+  width:100%;
+  max-width:400px;
+  box-shadow:0 24px 64px rgba(0,0,0,0.6),0 0 0 1px rgba(255,255,255,0.03);
+}
+.auth-title{
+  font-size:1.5em;
+  font-weight:600;
+  color:#fff;
+  margin-bottom:24px;
+  text-align:center;
+}
+.form-group{margin-bottom:18px;}
+.form-label{display:block;font-size:0.82em;font-weight:500;color:var(--text2);margin-bottom:7px;letter-spacing:0.4px;text-transform:uppercase;}
+.form-input{
+  width:100%;padding:13px 16px;
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  color:#fff;font-size:0.97em;
+  font-family:'DM Sans',sans-serif;
+  transition:all 0.25s;
+  outline:none;
+}
+.form-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow);}
+.form-input::placeholder{color:var(--text3);}
+.checkbox-row{display:flex;align-items:center;gap:9px;}
+.checkbox-row input[type="checkbox"]{width:16px;height:16px;accent-color:var(--accent);cursor:pointer;}
+.checkbox-row label{font-size:0.9em;color:var(--text2);cursor:pointer;}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px 20px;border:none;border-radius:var(--radius-sm);
+  font-family:'DM Sans',sans-serif;font-size:0.97em;font-weight:600;
+  cursor:pointer;transition:all 0.25s;text-decoration:none;
+  white-space:nowrap;
+}
+.btn-full{width:100%;}
+.btn-primary{background:var(--accent);color:#000;}
+.btn-primary:hover{background:var(--accent2);transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,212,160,0.35);}
+.btn-primary:active{transform:translateY(0);}
+.btn-ghost{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
+.btn-ghost:hover{background:var(--border);border-color:var(--border2);}
+.btn-danger{background:rgba(255,75,110,0.12);color:var(--danger);border:1px solid rgba(255,75,110,0.2);}
+.btn-danger:hover{background:rgba(255,75,110,0.2);}
+.btn-coin{background:rgba(251,191,36,0.12);color:var(--coin);border:1px solid rgba(251,191,36,0.25);}
+.btn-coin:hover{background:rgba(251,191,36,0.22);}
+.btn-sm{padding:8px 14px;font-size:0.87em;}
+.btn-xs{padding:5px 10px;font-size:0.8em;}
+.auth-link-row{text-align:center;margin-top:22px;font-size:0.9em;color:var(--text2);}
+.auth-link-row a{color:var(--accent);text-decoration:none;font-weight:500;}
+.auth-link-row a:hover{text-decoration:underline;}
+.msg{padding:11px 14px;border-radius:var(--radius-sm);font-size:0.9em;margin-bottom:16px;text-align:center;}
+.msg-error{background:rgba(255,75,110,0.1);color:var(--danger);border:1px solid rgba(255,75,110,0.2);}
+.msg-success{background:rgba(0,212,160,0.1);color:var(--accent);border:1px solid rgba(0,212,160,0.2);}
+.msg-info{background:rgba(245,158,11,0.1);color:var(--warn);border:1px solid rgba(245,158,11,0.2);}
+.auth-footer{margin-top:20px;text-align:center;font-size:0.82em;color:var(--text3);}
+.auth-footer span{color:var(--accent);}
+
+/* ===== DASHBOARD ===== */
+#view-dashboard{flex-direction:column;}
+.navbar{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:0 24px;
+  height:58px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:200;
+  backdrop-filter:blur(12px);
+}
+.navbar-left{display:flex;align-items:center;gap:14px;}
+.nav-brand{font-family:'Space Mono',monospace;font-size:1.25em;font-weight:700;color:var(--accent);letter-spacing:-0.5px;}
+.menu-toggle{
+  background:var(--surface2);border:1px solid var(--border);
+  color:var(--text2);font-size:1.2em;padding:6px 12px;
+  border-radius:var(--radius-sm);cursor:pointer;display:none;
+  transition:all 0.2s;
+}
+.menu-toggle:hover{color:var(--accent);border-color:var(--accent);}
+.navbar-right{display:flex;align-items:center;gap:10px;}
+.user-badge{
+  background:var(--surface2);border:1px solid var(--border);
+  padding:5px 13px;border-radius:30px;font-size:0.88em;color:var(--text2);
+}
+.coin-badge{
+  background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.25);
+  padding:5px 12px;border-radius:30px;font-size:0.88em;color:var(--coin);
+  font-weight:600;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:5px;
+}
+.coin-badge:hover{background:rgba(251,191,36,0.2);}
+.logout-link{
+  background:var(--surface2);border:1px solid var(--border);
+  color:var(--danger);padding:5px 13px;border-radius:30px;
+  font-size:0.88em;text-decoration:none;transition:all 0.2s;
+  font-weight:500;
+}
+.logout-link:hover{background:rgba(255,75,110,0.1);border-color:var(--danger);}
+
+/* Status bar */
+.status-bar{
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  padding:8px 24px;display:flex;align-items:center;justify-content:space-between;
+  font-size:0.83em;color:var(--text3);
+  flex-wrap:wrap;gap:8px;
+}
+.online-dot{
+  display:inline-flex;align-items:center;gap:6px;color:var(--accent);font-weight:500;
+}
+.online-dot::before{
+  content:'';width:7px;height:7px;background:var(--accent);
+  border-radius:50%;display:inline-block;
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 var(--accent-glow);}50%{opacity:0.7;box-shadow:0 0 0 5px transparent;}}
+
+/* Main layout */
+.main-layout{
+  display:grid;grid-template-columns:320px 1fr;
+  gap:20px;padding:20px;
+  max-width:1600px;margin:0 auto;width:100%;
+  flex:1;
+}
+.sidebar{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:20px;
+  height:fit-content;position:sticky;top:78px;
+}
+.main-panel{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:20px;
+  min-height:540px;
+}
+.section-title{
+  font-size:1.05em;font-weight:600;color:#fff;
+  margin-bottom:16px;padding-bottom:12px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:8px;
+}
+.section-title::before{content:'▍';color:var(--accent);}
+
+/* Email list */
+.email-list{list-style:none;max-height:460px;overflow-y:auto;padding-right:4px;}
+.email-item{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:12px;padding:14px;margin-bottom:10px;
+  cursor:pointer;transition:all 0.25s;
+}
+.email-item:hover{border-color:var(--accent);transform:translateY(-1px);box-shadow:0 4px 16px var(--accent-glow);}
+.email-item.active{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent);background:rgba(0,212,160,0.04);}
+.email-addr{font-weight:600;color:#fff;word-break:break-all;font-size:0.9em;margin-bottom:7px;}
+.email-meta{font-size:0.78em;color:var(--text3);line-height:1.7;}
+
+/* Mailbox */
+.mail-item{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:12px;padding:16px;margin-bottom:10px;
+  cursor:pointer;transition:all 0.25s;
+}
+.mail-item:hover{border-color:var(--accent);transform:translateY(-1px);box-shadow:0 4px 14px var(--accent-glow);}
+.mail-sender{font-weight:600;color:var(--accent);font-size:0.93em;margin-bottom:5px;}
+.mail-subject{color:var(--text);font-size:0.92em;line-height:1.5;margin:5px 0;}
+.mail-time{font-size:0.77em;color:var(--text3);display:flex;align-items:center;gap:5px;}
+.mail-time::before{content:'⏱';}
+
+.empty-state{
+  text-align:center;padding:60px 20px;color:var(--text3);font-size:1em;
+}
+.empty-state-icon{font-size:3em;margin-bottom:14px;opacity:0.4;display:block;}
+.loading-spin{
+  text-align:center;padding:40px;color:var(--accent);
+}
+.loading-spin::after{
+  content:'';display:inline-block;width:28px;height:28px;
+  border:3px solid var(--border);border-top-color:var(--accent);
+  border-radius:50%;animation:spin 0.8s linear infinite;margin-left:10px;vertical-align:middle;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.header-actions{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:18px;flex-wrap:wrap;gap:12px;
+}
+.email-badge{
+  background:var(--bg2);border:1px solid var(--border);
+  padding:7px 14px;border-radius:30px;color:var(--accent);
+  font-size:0.87em;font-weight:500;word-break:break-all;
+}
+.email-badge::before{content:'📬 ';}
+
+/* Modals */
+.modal-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);
+  justify-content:center;align-items:center;z-index:500;
+}
+.modal-overlay.open{display:flex;}
+.modal-box{
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:18px;padding:28px;width:90%;max-width:560px;
+  max-height:82vh;overflow-y:auto;
+  box-shadow:0 32px 80px rgba(0,0,0,0.7);
+  animation:slideUp 0.28s ease;
+}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.modal-title{
+  font-size:1.15em;font-weight:600;color:#fff;
+  margin-bottom:18px;padding-bottom:13px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:8px;
+}
+.modal-body{color:var(--text);line-height:1.6;margin-bottom:20px;}
+.modal-actions{display:flex;gap:10px;margin-top:20px;}
+.mail-content-area{
+  font-family:'DM Sans',sans-serif;line-height:1.7;
+  color:var(--text);font-size:0.93em;
+}
+.mail-content-area img{max-width:100%;height:auto;border-radius:8px;}
+.mail-content-area a{color:var(--accent);}
+.mail-content-area table{max-width:100%;overflow-x:auto;display:block;border-collapse:collapse;}
+
+/* Coin system */
+.coin-panel{
+  background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.18);
+  border-radius:12px;padding:16px;margin-top:16px;
+}
+.coin-amount{
+  font-family:'Space Mono',monospace;font-size:2em;font-weight:700;
+  color:var(--coin);text-align:center;margin:10px 0;
+}
+.sub-status{
+  text-align:center;font-size:0.82em;padding:6px 12px;
+  border-radius:30px;display:inline-block;
+}
+.sub-active{background:rgba(0,212,160,0.12);color:var(--accent);border:1px solid rgba(0,212,160,0.25);}
+.sub-expired{background:rgba(255,75,110,0.1);color:var(--danger);border:1px solid rgba(255,75,110,0.2);}
+.shop-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;}
+.shop-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:10px;padding:14px;text-align:center;
+}
+.shop-card-price{font-size:1.4em;font-weight:700;color:var(--coin);}
+.shop-card-label{font-size:0.78em;color:var(--text3);margin:5px 0 10px;}
+
+/* Support chat */
+.support-btn{
+  position:fixed;bottom:24px;right:24px;z-index:300;
+  background:var(--accent);color:#000;border:none;
+  border-radius:50px;padding:12px 20px;font-size:0.95em;font-weight:700;
+  cursor:pointer;box-shadow:0 8px 28px rgba(0,212,160,0.45);
+  transition:all 0.25s;display:flex;align-items:center;gap:8px;
+}
+.support-btn:hover{transform:translateY(-2px);box-shadow:0 12px 35px rgba(0,212,160,0.55);}
+.support-window{
+  display:none;position:fixed;bottom:80px;right:24px;z-index:400;
+  width:340px;max-width:calc(100vw - 32px);
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:18px;box-shadow:var(--shadow);
+  overflow:hidden;animation:slideUp 0.25s ease;
+}
+.support-window.open{display:flex;flex-direction:column;}
+.support-header{
+  background:var(--surface2);padding:14px 18px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.support-header-title{font-weight:600;color:#fff;font-size:0.95em;display:flex;align-items:center;gap:7px;}
+.support-close{background:none;border:none;color:var(--text3);font-size:1.2em;cursor:pointer;padding:4px;}
+.support-close:hover{color:var(--text);}
+.support-messages{
+  flex:1;padding:14px;overflow-y:auto;
+  max-height:260px;min-height:120px;
+  display:flex;flex-direction:column;gap:10px;
+  background:var(--bg2);
+}
+.support-msg{
+  padding:9px 13px;border-radius:10px;font-size:0.88em;line-height:1.5;max-width:85%;
+}
+.support-msg.user{background:var(--accent);color:#000;align-self:flex-end;border-bottom-right-radius:4px;}
+.support-msg.admin{background:var(--surface2);color:var(--text);align-self:flex-start;border-bottom-left-radius:4px;}
+.support-msg.system{background:transparent;color:var(--text3);align-self:center;font-size:0.8em;text-align:center;}
+.support-input-row{
+  display:flex;gap:8px;padding:12px;border-top:1px solid var(--border);
+  background:var(--surface);
+}
+.support-input{
+  flex:1;background:var(--bg2);border:1px solid var(--border);
+  border-radius:8px;padding:9px 13px;color:#fff;font-size:0.9em;
+  font-family:'DM Sans',sans-serif;outline:none;resize:none;
+  max-height:80px;
+}
+.support-input:focus{border-color:var(--accent);}
+.support-send{
+  background:var(--accent);color:#000;border:none;
+  border-radius:8px;padding:9px 14px;cursor:pointer;font-weight:700;
+  transition:all 0.2s;
+}
+.support-send:hover{background:var(--accent2);}
+
+/* Admin Panel */
+#view-admin{flex-direction:column;background:var(--bg);}
+.admin-header{
+  background:rgba(255,75,110,0.08);border-bottom:1px solid rgba(255,75,110,0.2);
+  padding:14px 24px;display:flex;align-items:center;justify-content:space-between;
+}
+.admin-title{font-family:'Space Mono',monospace;color:var(--danger);font-size:1.15em;font-weight:700;}
+.admin-content{max-width:1100px;margin:24px auto;padding:0 20px;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.admin-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:22px;
+}
+.admin-card-title{font-size:1em;font-weight:600;color:#fff;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.support-ticket{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:10px;padding:14px;margin-bottom:10px;
+}
+.ticket-meta{font-size:0.8em;color:var(--text3);margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;}
+.ticket-user{font-weight:600;color:var(--accent);}
+.ticket-msg{font-size:0.9em;color:var(--text);line-height:1.5;}
+.ticket-time{font-size:0.78em;color:var(--text3);}
+.user-row{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:8px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;
+}
+.user-row-name{font-weight:600;color:#fff;font-size:0.92em;}
+.sub-badge{font-size:0.75em;padding:3px 9px;border-radius:30px;}
+
+/* Responsive */
+@media(max-width:768px){
+  .menu-toggle{display:block;}
+  .main-layout{grid-template-columns:1fr;padding:12px;}
+  .sidebar{
+    position:fixed;left:-110%;top:58px;width:85%;
+    height:calc(100vh - 58px);z-index:150;
+    border-radius:0 var(--radius) var(--radius) 0;
+    overflow-y:auto;transition:left 0.3s ease;
+  }
+  .sidebar.open{left:0;box-shadow:8px 0 30px rgba(0,0,0,0.5);}
+  .sidebar-overlay{
+    display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:140;
+  }
+  .sidebar-overlay.open{display:block;}
+  .admin-content{grid-template-columns:1fr;}
+  .shop-grid{grid-template-columns:1fr;}
+  .support-window{right:12px;bottom:72px;width:calc(100vw - 24px);}
+}
+@media(min-width:769px){.sidebar-overlay{display:none!important;}}
+
+/* Subscription lock overlay */
+.sub-lock{
+  position:absolute;inset:0;background:rgba(8,12,16,0.92);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  border-radius:var(--radius);z-index:50;text-align:center;padding:30px;
+  backdrop-filter:blur(4px);
+}
+.sub-lock-icon{font-size:3em;margin-bottom:16px;}
+.sub-lock-title{font-size:1.2em;font-weight:700;color:#fff;margin-bottom:10px;}
+.sub-lock-desc{color:var(--text2);font-size:0.9em;line-height:1.6;margin-bottom:22px;}
+.main-panel-wrap{position:relative;}
+
+/* Toast */
 .toast-container{position:fixed;top:70px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;}
-.toast{background:var(--surface2);border-radius:10px;padding:12px 18px;animation:toastIn 0.3s ease;}
+.toast{
+  background:var(--surface2);border:1px solid var(--border2);
+  border-radius:10px;padding:12px 18px;font-size:0.9em;color:var(--text);
+  box-shadow:var(--shadow);min-width:220px;max-width:320px;
+  animation:toastIn 0.3s ease;
+  display:flex;align-items:center;gap:10px;
+}
 @keyframes toastIn{from{opacity:0;transform:translateX(40px);}to{opacity:1;transform:translateX(0);}}
-/* ... (Thêm các style bổ sung nếu cần) ... */
+.toast.success{border-color:rgba(0,212,160,0.3);color:var(--accent);}
+.toast.error{border-color:rgba(255,75,110,0.3);color:var(--danger);}
+.toast.info{border-color:rgba(245,158,11,0.3);color:var(--warn);}
 </style>
 </head>
 <body>
 
+<!-- ===== LOGIN VIEW ===== -->
 <div id="view-login" class="view active">
   <div class="auth-logo">⚡ TempMail Pro</div>
+  <div class="auth-sub">Email tạm thời – Bảo mật, nhanh, mượt</div>
   <div class="auth-card">
     <div class="auth-title">🔐 Đăng nhập</div>
     <div id="login-msg"></div>
-    <input class="form-input" id="login-user" type="text" placeholder="Tên đăng nhập">
-    <input class="form-input" id="login-pass" type="password" placeholder="Mật khẩu" style="margin-top:10px;">
-    <button class="btn btn-primary btn-full" onclick="doLogin()" style="margin-top:15px;">Đăng nhập</button>
+    <div class="form-group">
+      <label class="form-label">Tên đăng nhập</label>
+      <input class="form-input" id="login-user" type="text" placeholder="Nhập tài khoản..." autocomplete="username">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Mật khẩu</label>
+      <input class="form-input" id="login-pass" type="password" placeholder="Nhập mật khẩu..." autocomplete="current-password">
+    </div>
+    <div class="form-group checkbox-row">
+      <input type="checkbox" id="remember-me">
+      <label for="remember-me">Ghi nhớ đăng nhập (30 ngày)</label>
+    </div>
+    <button class="btn btn-primary btn-full" onclick="doLogin()" style="margin-top:6px;">Đăng nhập</button>
   </div>
-  <div class="auth-link-row" style="margin-top:20px;">Chưa có tài khoản? <a href="#" onclick="showView('register')">Đăng ký</a></div>
+  <div class="auth-link-row">Chưa có tài khoản? <a href="#" onclick="showView('register')">Đăng ký ngay</a></div>
+  <div class="auth-footer">by <span>Lê Viết Tấn Khang</span> · Hỗ trợ: 0383376202</div>
 </div>
 
+<!-- ===== REGISTER VIEW ===== -->
 <div id="view-register" class="view">
-    <div class="auth-logo">⚡ TempMail Pro</div>
-    <div class="auth-card">
-      <div class="auth-title">📝 Đăng ký</div>
-      <div id="reg-msg"></div>
-      <input class="form-input" id="reg-user" type="text" placeholder="Tên đăng nhập">
-      <input class="form-input" id="reg-pass" type="password" placeholder="Mật khẩu" style="margin-top:10px;">
-      <input class="form-input" id="reg-pass2" type="password" placeholder="Nhập lại mật khẩu" style="margin-top:10px;">
-      <button class="btn btn-primary btn-full" onclick="doRegister()" style="margin-top:15px;">Tạo tài khoản</button>
+  <div class="auth-logo">⚡ TempMail Pro</div>
+  <div class="auth-sub">Đăng ký nhận ngay 10 xu miễn phí!</div>
+  <div class="auth-card">
+    <div class="auth-title">📝 Đăng ký tài khoản</div>
+    <div id="reg-msg"></div>
+    <div class="form-group">
+      <label class="form-label">Tên đăng nhập</label>
+      <input class="form-input" id="reg-user" type="text" placeholder="Tối thiểu 4 ký tự..." autocomplete="username">
     </div>
-    <div class="auth-link-row" style="margin-top:20px;">Đã có tài khoản? <a href="#" onclick="showView('login')">Đăng nhập</a></div>
+    <div class="form-group">
+      <label class="form-label">Mật khẩu</label>
+      <input class="form-input" id="reg-pass" type="password" placeholder="Tối thiểu 6 ký tự..." autocomplete="new-password">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Xác nhận mật khẩu</label>
+      <input class="form-input" id="reg-pass2" type="password" placeholder="Nhập lại mật khẩu..." autocomplete="new-password">
+    </div>
+    <div style="background:rgba(0,212,160,0.07);border:1px solid rgba(0,212,160,0.18);border-radius:10px;padding:12px;margin-bottom:16px;font-size:0.85em;color:var(--text2);line-height:1.6;">
+      🎁 Đăng ký nhận <strong style="color:var(--coin);">10 xu</strong> miễn phí → dùng mail 1 tháng (10 xu) hoặc tích thêm 30 xu để dùng 1 năm!
+    </div>
+    <button class="btn btn-primary btn-full" onclick="doRegister()">Tạo tài khoản</button>
+  </div>
+  <div class="auth-link-row">Đã có tài khoản? <a href="#" onclick="showView('login')">Đăng nhập</a></div>
+  <div class="auth-footer">by <span>Lê Viết Tấn Khang</span> · Hỗ trợ: 0383376202</div>
 </div>
 
+<!-- ===== DASHBOARD VIEW ===== -->
 <div id="view-dashboard" class="view">
-    <nav class="navbar">
-        <div class="nav-brand">⚡ TempMail</div>
-        <div class="navbar-right" style="display:flex; gap:15px; align-items:center;">
-            <div class="coin-badge" onclick="openCoinModal()">🪙 <span id="nav-coins">0</span> xu</div>
-            <span id="nav-username"></span>
-            <a href="#" onclick="doLogout()">Thoát</a>
-        </div>
-    </nav>
-    <div class="main-layout">
-        <div class="sidebar">
-            <button class="btn btn-primary btn-full" onclick="createNewEmail()" id="create-btn">✨ Tạo email mới</button>
-            <ul id="emailList" style="margin-top:20px; list-style:none;"></ul>
-        </div>
-        <div class="main-panel" style="position:relative;">
-            <div id="sub-lock-overlay" class="sub-lock" style="display:none;">
-                <h3>🔒 Cần kích hoạt gói</h3>
-                <button class="btn btn-primary" onclick="openCoinModal()">Mở quản lý xu</button>
-            </div>
-            <div id="main-panel-content">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <h3 id="currentEmailDisplay">Hộp thư</h3>
-                    <button class="btn btn-primary btn-sm" onclick="checkMailbox()">Làm mới</button>
-                </div>
-                <div id="mailbox" style="margin-top:20px;"></div>
-            </div>
-        </div>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-left">
+      <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+      <div class="nav-brand">⚡ TempMail</div>
     </div>
+    <div class="navbar-right">
+      <div class="coin-badge" onclick="openCoinModal()" title="Xu của bạn">🪙 <span id="nav-coins">0</span> xu</div>
+      <div class="user-badge">👤 <span id="nav-username"></span></div>
+      <a href="#" class="logout-link" onclick="doLogout()">Đăng xuất</a>
+    </div>
+  </nav>
+  <!-- Sidebar overlay mobile -->
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+  <!-- Download notice banner -->
+  <div id="download-notice" style="background:rgba(245,158,11,0.1);border-bottom:1px solid rgba(245,158,11,0.25);padding:8px 20px;text-align:center;font-size:0.82em;color:var(--warn);display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;">
+    <span>⚡ Để dùng đầy đủ, hãy <strong>tải file về máy</strong> rồi mở bằng Chrome/Edge. Preview trong Claude có thể bị giới hạn kết nối API.</span>
+    <button onclick="document.getElementById('download-notice').style.display='none'" style="background:none;border:none;color:var(--warn);cursor:pointer;font-size:1.1em;">✕</button>
+  </div>
+  <!-- Status bar -->
+  <div class="status-bar">
+    <span>🔐 <strong id="sb-username"></strong></span>
+    <span class="online-dot">Online</span>
+    <span id="sb-sub-info" style="font-size:0.85em;"></span>
+  </div>
+  <!-- Main layout -->
+  <div class="main-layout">
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+      <h3 class="section-title">Email của tôi</h3>
+      <button class="btn btn-primary btn-full" onclick="createNewEmail()" id="create-btn">✨ Tạo email mới</button>
+      <div style="margin-top:18px;">
+        <div style="font-size:0.8em;color:var(--text3);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px;">Danh sách đã lưu</div>
+        <ul class="email-list" id="emailList">
+          <li class="loading-spin" style="list-style:none;padding:20px 0;"></li>
+        </ul>
+      </div>
+      <!-- Coin quick panel -->
+      <div class="coin-panel">
+        <div style="font-size:0.82em;color:var(--text3);text-align:center;margin-bottom:4px;">Xu của bạn</div>
+        <div class="coin-amount" id="sidebar-coins">0</div>
+        <div style="text-align:center;margin-bottom:12px;">
+          <span id="sidebar-sub-badge" class="sub-status sub-expired">Chưa kích hoạt</span>
+        </div>
+        <button class="btn btn-coin btn-full btn-sm" onclick="openCoinModal()">🪙 Quản lý xu & gói</button>
+      </div>
+    </div>
+    <!-- Main panel -->
+    <div class="main-panel-wrap">
+      <div class="main-panel" id="main-panel">
+        <div id="sub-lock-overlay" class="sub-lock" style="display:none;">
+          <div class="sub-lock-icon">🔒</div>
+          <div class="sub-lock-title">Cần kích hoạt gói sử dụng</div>
+          <div class="sub-lock-desc">Bạn cần có xu và kích hoạt gói để sử dụng tính năng email tạm thời.<br>Nhấn bên dưới để xem gói hoặc nhặt xu hàng ngày!</div>
+          <button class="btn btn-primary" onclick="openCoinModal()">🪙 Mở quản lý xu</button>
+        </div>
+        <div id="main-panel-content">
+          <div class="header-actions">
+            <h3 class="section-title" style="margin-bottom:0;">Hộp thư đến</h3>
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+              <span class="email-badge" id="currentEmailDisplay">Chưa chọn email</span>
+              <button class="btn btn-ghost btn-sm" onclick="checkMailbox()">⟳ Làm mới</button>
+            </div>
+          </div>
+          <div id="mailbox">
+            <div class="empty-state">
+              <span class="empty-state-icon">📭</span>
+              Chọn email từ danh sách bên trái
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Footer -->
+  <div style="text-align:center;padding:18px 20px;color:var(--text3);font-size:0.82em;border-top:1px solid var(--border);">
+    by <span style="color:var(--accent);">Lê Viết Tấn Khang</span> · Hotline: <span style="color:var(--accent);">0383376202</span>
+  </div>
 </div>
 
+<!-- ===== ADMIN VIEW ===== -->
+<div id="view-admin" class="view">
+  <div class="admin-header">
+    <div class="admin-title">🛡️ ADMIN PANEL – Lê Viết Tấn Khang</div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="font-size:0.85em;color:var(--text3);">📞 0383376202</span>
+      <a href="#" class="logout-link" onclick="doLogout()">Đăng xuất</a>
+    </div>
+  </div>
+  <div class="admin-content">
+    <!-- Support tickets -->
+    <div class="admin-card">
+      <div class="admin-card-title">📨 Tin nhắn hỗ trợ (<span id="admin-ticket-count">0</span>)</div>
+      <div id="admin-tickets">
+        <div class="empty-state" style="padding:30px 0;">
+          <span class="empty-state-icon" style="font-size:2em;">📭</span>
+          Chưa có tin nhắn hỗ trợ nào
+        </div>
+      </div>
+    </div>
+    <!-- User list -->
+    <div class="admin-card">
+      <div class="admin-card-title">👥 Người dùng (<span id="admin-user-count">0</span>)</div>
+      <div id="admin-users"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SUPPORT BUTTON & WINDOW ===== -->
+<button class="support-btn" id="support-fab" onclick="toggleSupport()" style="display:none;">
+  💬 Hỗ trợ
+</button>
+<div class="support-window" id="support-window">
+  <div class="support-header">
+    <div class="support-header-title">💬 Hỗ trợ – TempMail Pro</div>
+    <button class="support-close" onclick="toggleSupport()">✕</button>
+  </div>
+  <div class="support-messages" id="support-messages">
+    <div class="support-msg system">Xin chào! Hãy để lại tin nhắn, admin sẽ phản hồi sớm.</div>
+    <div class="support-msg system">📞 Hoặc gọi: <strong>0383376202</strong></div>
+  </div>
+  <div class="support-input-row">
+    <textarea class="support-input" id="support-input" placeholder="Nhập câu hỏi..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendSupportMsg();}"></textarea>
+    <button class="support-send" onclick="sendSupportMsg()">➤</button>
+  </div>
+</div>
+
+<!-- ===== MODALS ===== -->
+<!-- Mail content modal -->
 <div class="modal-overlay" id="modal-mail">
-    <div class="modal-box">
-        <h3 id="modal-mail-title"></h3>
-        <hr style="margin:15px 0; opacity:0.1;">
-        <div id="modal-mail-body"></div>
-        <button class="btn btn-primary" style="margin-top:20px;" onclick="closeModal('modal-mail')">Đóng</button>
+  <div class="modal-box">
+    <div class="modal-title" id="modal-mail-title">📧 Nội dung email</div>
+    <div class="modal-body">
+      <div class="mail-content-area" id="modal-mail-body"></div>
     </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-mail')">Đóng</button>
+    </div>
+  </div>
 </div>
 
+<!-- Delete confirm modal -->
+<div class="modal-overlay" id="modal-delete">
+  <div class="modal-box">
+    <div class="modal-title">🗑️ Xác nhận xóa</div>
+    <div class="modal-body">Bạn có chắc muốn xóa email <strong id="delete-email-name" style="color:var(--accent);"></strong> khỏi danh sách lưu trữ?</div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-delete')">Hủy</button>
+      <button class="btn btn-danger" onclick="confirmDelete()">Xóa</button>
+    </div>
+  </div>
+</div>
+
+<!-- Coin / Shop modal -->
 <div class="modal-overlay" id="modal-coin">
-    <div class="modal-box">
-        <h3>🪙 Quản lý Xu & Gói</h3>
-        <p>Xu của bạn: <strong id="modal-coin-amount">0</strong></p>
-        <button class="btn btn-primary btn-full" onclick="collectCoins()" id="collect-btn" style="margin-top:10px;">Nhặt xu hàng ngày</button>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:20px;">
-            <button class="btn btn-primary" onclick="buyPlan('month', 10)">10 xu / Tháng</button>
-            <button class="btn btn-primary" onclick="buyPlan('year', 30)">30 xu / Năm</button>
+  <div class="modal-box">
+    <div class="modal-title">🪙 Xu & Gói sử dụng</div>
+    <div class="modal-body">
+      <div style="text-align:center;margin-bottom:20px;">
+        <div style="font-size:0.85em;color:var(--text3);margin-bottom:6px;">Xu hiện tại của bạn</div>
+        <div style="font-family:'Space Mono',monospace;font-size:3em;font-weight:700;color:var(--coin);" id="modal-coin-amount">0</div>
+        <div style="margin-top:8px;" id="modal-sub-status"></div>
+      </div>
+      <!-- Daily collect -->
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:18px;">
+        <div style="font-weight:600;color:#fff;margin-bottom:6px;">🎁 Nhặt xu hàng ngày</div>
+        <div style="font-size:0.87em;color:var(--text2);margin-bottom:12px;">Mỗi ngày bạn có thể nhặt 1–3 xu miễn phí. Tích đủ để kích hoạt gói!</div>
+        <button class="btn btn-coin btn-full" id="collect-btn" onclick="collectCoins()">🪙 Nhặt xu ngay</button>
+      </div>
+      <!-- Shop -->
+      <div style="font-weight:600;color:#fff;margin-bottom:12px;">🛒 Kích hoạt gói</div>
+      <div class="shop-grid">
+        <div class="shop-card">
+          <div class="shop-card-price">10 🪙</div>
+          <div class="shop-card-label">Sử dụng mail<br><strong>1 Tháng</strong></div>
+          <button class="btn btn-primary btn-full btn-sm" onclick="buyPlan('month',10)">Kích hoạt</button>
         </div>
-        <button class="btn btn-full" style="margin-top:20px;" onclick="closeModal('modal-coin')">Đóng</button>
+        <div class="shop-card">
+          <div class="shop-card-price">30 🪙</div>
+          <div class="shop-card-label">Sử dụng mail<br><strong>1 Năm</strong></div>
+          <button class="btn btn-primary btn-full btn-sm" onclick="buyPlan('year',30)">Kích hoạt</button>
+        </div>
+      </div>
+      <div style="margin-top:14px;font-size:0.8em;color:var(--text3);text-align:center;">
+        📞 Hỗ trợ mua xu: <strong style="color:var(--accent);">0383376202</strong>
+      </div>
     </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-coin')">Đóng</button>
+    </div>
+  </div>
 </div>
 
+<!-- Toast container -->
 <div class="toast-container" id="toast-container"></div>
 
+<!-- ===== MAIN SCRIPT ===== -->
 <script>
-/**
- * PHẦN FIX LỖI VÀ TỐI ƯU API
- */
+// ============================================================
+// CẤU HÌNH API FLASK BACKEND (DỰA TRÊN FILE webm.py)
+// ============================================================
+const API_BASE = '';  // Cùng origin
 
-const APIS = ['https://api.mail.gw', 'https://api.mail.tm'];
-// Danh sách proxy dự phòng mạnh mẽ hơn
-const PROXIES = [
-    '', // Thử trực tiếp trước
-    'https://api.allorigins.win/raw?url=',
-    'https://corsproxy.io/?',
-    'https://thingproxy.freeboard.io/fetch/',
-    'https://api.codetabs.com/v1/proxy/?quest='
-];
+// ============================================================
+// STORAGE HELPERS (CLIENT-SIDE CHO COIN, ADMIN, SUPPORT)
+// ============================================================
+const DB_KEY = 'tempmail_users_v2';
+const SESSION_KEY = 'tempmail_session';
+const REMEMBER_KEY = 'tempmail_remember';
+const SUPPORT_KEY = 'tempmail_support';
 
-let currentApiIdx = 0;
+function getUsers() {
+  try { return JSON.parse(localStorage.getItem(DB_KEY) || '{}'); } catch { return {}; }
+}
+function saveUsers(u) { localStorage.setItem(DB_KEY, JSON.stringify(u)); }
 
-// Hàm Fetch thông minh: Tự động thử qua nhiều Proxy nếu lỗi
-async function robustFetch(endpoint, options = {}) {
-    let lastError;
-    const fullUrl = APIS[currentApiIdx] + endpoint;
+function getSession() {
+  const s = sessionStorage.getItem(SESSION_KEY);
+  if (s) return JSON.parse(s);
+  const r = localStorage.getItem(REMEMBER_KEY);
+  if (r) return JSON.parse(r);
+  return null;
+}
+function setSession(data, remember) {
+  sessionStorage.setItem(SESSION_KEY, JSON.stringify(data));
+  if (remember) localStorage.setItem(REMEMBER_KEY, JSON.stringify(data));
+}
+function clearSession() {
+  sessionStorage.removeItem(SESSION_KEY);
+  localStorage.removeItem(REMEMBER_KEY);
+}
 
-    for (let proxy of PROXIES) {
-        try {
-            const targetUrl = proxy ? proxy + encodeURIComponent(fullUrl) : fullUrl;
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 8000); // 8s timeout
+function getSupportMessages() {
+  try { return JSON.parse(localStorage.getItem(SUPPORT_KEY) || '[]'); } catch { return []; }
+}
+function saveSupportMessages(msgs) { localStorage.setItem(SUPPORT_KEY, JSON.stringify(msgs)); }
 
-            const response = await fetch(targetUrl, {
-                ...options,
-                signal: controller.signal,
-                headers: {
-                    ...options.headers,
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
-            });
-            clearTimeout(timeoutId);
+// ============================================================
+// TOAST
+// ============================================================
+function toast(msg, type='info', duration=3000) {
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  const icons = {success:'✅',error:'❌',info:'ℹ️'};
+  el.innerHTML = `<span>${icons[type]||'ℹ️'}</span><span>${msg}</span>`;
+  document.getElementById('toast-container').appendChild(el);
+  setTimeout(() => { el.style.opacity='0'; el.style.transition='opacity 0.4s'; setTimeout(()=>el.remove(),400); }, duration);
+}
 
-            if (response.ok || response.status === 201 || response.status === 422) {
-                return response;
-            }
-        } catch (e) {
-            lastError = e;
-            continue; // Thử proxy tiếp theo
-        }
+// ============================================================
+// AUTH LOGIC (FLASK BACKEND)
+// ============================================================
+async function doRegister() {
+  const username = document.getElementById('reg-user').value.trim();
+  const password = document.getElementById('reg-pass').value;
+  const pass2    = document.getElementById('reg-pass2').value;
+  const msgEl    = document.getElementById('reg-msg');
+
+  if (username.length < 4) { showMsg(msgEl, 'error', 'Tên đăng nhập phải từ 4 ký tự!'); return; }
+  if (password.length < 6) { showMsg(msgEl, 'error', 'Mật khẩu phải từ 6 ký tự!'); return; }
+  if (password !== pass2)  { showMsg(msgEl, 'error', 'Mật khẩu xác nhận không khớp!'); return; }
+
+  // Gửi request đăng ký đến Flask backend
+  try {
+    const formData = new FormData();
+    formData.append('username', username);
+    formData.append('password', password);
+    formData.append('confirm_password', pass2);
+    const resp = await fetch('/register', { method: 'POST', body: formData });
+    const text = await resp.text();
+    // Nếu đăng ký thành công Flask sẽ redirect, ta chặn và xử lý thủ công
+    if (resp.redirected || resp.url.includes('/login')) {
+      // Đồng thời cập nhật localStorage cho hệ thống coin
+      const users = getUsers();
+      if (!users[username]) {
+        users[username] = {
+          passwordHash: 'flask_managed',
+          createdAt: new Date().toISOString(),
+          lastLogin: null,
+          coins: 10,
+          subscription: { active: false, expiresAt: null, plan: null },
+          lastCoinCollect: null
+        };
+        saveUsers(users);
+      }
+      showMsg(msgEl, 'success', '🎉 Đăng ký thành công! Bạn nhận được 10 xu. Đang chuyển hướng...');
+      setTimeout(() => showView('login'), 1800);
+    } else {
+      showMsg(msgEl, 'error', 'Đăng ký thất bại, tên đăng nhập có thể đã tồn tại.');
     }
-    
-    // Nếu tất cả proxy thất bại ở API 1, đổi sang API 2
-    if (currentApiIdx === 0) {
-        currentApiIdx = 1;
-        return robustFetch(endpoint, options);
-    }
-    
-    throw new Error("Không thể kết nối API. Hãy thử dùng VPN hoặc tải file về máy.");
+  } catch (e) {
+    showMsg(msgEl, 'error', 'Lỗi kết nối đến server.');
+  }
 }
 
-// Hàm lấy Domain (Fix lỗi không tạo được mail)
-async function getDomains() {
-    try {
-        const res = await robustFetch('/domains');
-        const data = await res.json();
-        return data['hydra:member'] || [];
-    } catch (err) {
-        toast("Lỗi lấy Domain: " + err.message, "error");
-        return [];
-    }
-}
-
-// Hàm tạo Account
-async function createAccount(address, password) {
-    return robustFetch('/accounts', {
-        method: 'POST',
-        body: JSON.stringify({ address, password })
-    });
-}
-
-// Hàm lấy Token
-async function getTokenApi(address, password) {
-    const res = await robustFetch('/token', {
-        method: 'POST',
-        body: JSON.stringify({ address, password })
-    });
-    const data = await res.json();
-    return data.token;
-}
-
-// [LOGIC QUẢN LÝ EMAIL]
-async function createNewEmail() {
-    const user = getSessionUser();
-    if (!isSubActive(user)) return toast("Bạn cần kích hoạt gói!", "error");
-
-    const btn = document.getElementById('create-btn');
-    btn.disabled = true; btn.innerText = "Đang tạo...";
-
-    try {
-        const domains = await getDomains();
-        if (domains.length === 0) throw new Error("Không có domain khả dụng");
-
-        const domain = domains[0].domain;
-        const username = 'tk' + Math.random().toString(36).substring(2, 10);
-        const address = `${username}@${domain}`;
-        const password = 'Pass' + Math.random().toString(36);
-
-        const regRes = await createAccount(address, password);
-        if (!regRes.ok) throw new Error("Server từ chối tạo mail");
-
-        const token = await getTokenApi(address, password);
-        
-        // Lưu vào máy
-        const saved = getUserEmails(user.username);
-        saved[address] = { address, password, token, createdAt: new Date() };
-        saveUserEmails(user.username, saved);
-
-        toast("Đã tạo: " + address, "success");
-        loadEmails();
-    } catch (err) {
-        toast("Lỗi: " + err.message, "error");
-    } finally {
-        btn.disabled = false; btn.innerText = "✨ Tạo email mới";
-    }
-}
-
-// Hàm kiểm tra Mailbox (Fix lỗi không nhận được mã)
-async function checkMailbox() {
-    if (!window.currentSelectedEmail) return;
-    const mailbox = document.getElementById('mailbox');
-    
-    try {
-        const user = getSessionUser();
-        const emailData = getUserEmails(user.username)[window.currentSelectedEmail];
-        
-        const res = await robustFetch('/messages', {
-            headers: { 'Authorization': `Bearer ${emailData.token}` }
-        });
-
-        if (res.status === 401) { // Token hết hạn, tự refresh
-            const newToken = await getTokenApi(emailData.address, emailData.password);
-            emailData.token = newToken;
-            const saved = getUserEmails(user.username);
-            saved[window.currentSelectedEmail] = emailData;
-            saveUserEmails(user.username, saved);
-            return checkMailbox(); 
-        }
-
-        const data = await res.json();
-        const msgs = data['hydra:member'] || [];
-
-        if (msgs.length === 0) {
-            mailbox.innerHTML = `<div style="text-align:center; padding:40px; color:#546272;">
-                <p>Hộp thư trống...</p>
-                <small>Đang tự động kiểm tra sau mỗi 5 giây</small>
-            </div>`;
-        } else {
-            mailbox.innerHTML = msgs.map(m => `
-                <div class="mail-item" onclick="viewMail('${m.id}')">
-                    <div style="color:var(--accent); font-weight:bold;">${m.from.address}</div>
-                    <div style="margin:5px 0;">${m.subject}</div>
-                    <small style="color:var(--text3);">${new Date(m.createdAt).toLocaleTimeString()}</small>
-                </div>
-            `).join('');
-        }
-    } catch (err) {
-        console.error(err);
-    }
-}
-
-// Xem chi tiết mail
-async function viewMail(id) {
-    const user = getSessionUser();
-    const emailData = getUserEmails(user.username)[window.currentSelectedEmail];
-    openModal('modal-mail');
-    document.getElementById('modal-mail-body').innerHTML = "Đang tải nội dung...";
-
-    try {
-        const res = await robustFetch('/messages/' + id, {
-            headers: { 'Authorization': `Bearer ${emailData.token}` }
-        });
-        const data = await res.json();
-        document.getElementById('modal-mail-title').innerText = data.subject;
-        document.getElementById('modal-mail-body').innerHTML = data.html || data.text;
-    } catch (err) {
-        document.getElementById('modal-mail-body').innerText = "Lỗi tải mail.";
-    }
-}
-
-// Auto-refresh mỗi 5 giây khi người dùng đang ở dashboard
-setInterval(() => {
-    if (document.getElementById('view-dashboard').classList.contains('active')) {
-        checkMailbox();
-    }
-}, 5000);
-
-// --- CÁC HÀM TIỆN ÍCH GIỮ NGUYÊN TỪ BẢN GỐC ---
-function getSessionUser() {
-    const session = JSON.parse(sessionStorage.getItem('tempmail_session') || localStorage.getItem('tempmail_remember') || '{}');
-    const users = JSON.parse(localStorage.getItem('tempmail_users_v2') || '{}');
-    return users[session.username];
-}
-
-function getUserEmails(uname) { return JSON.parse(localStorage.getItem('tm_emails_'+uname) || '{}'); }
-function saveUserEmails(uname, data) { localStorage.setItem('tm_emails_'+uname, JSON.stringify(data)); }
-
-function isSubActive(user) {
-    if(!user || !user.subscription.active) return false;
-    return new Date(user.subscription.expiresAt) > new Date();
-}
-
-function loadEmails() {
-    const user = getSessionUser();
-    const emails = Object.values(getUserEmails(user.username));
-    const list = document.getElementById('emailList');
-    list.innerHTML = emails.map(e => `
-        <li class="email-item" onclick="window.currentSelectedEmail='${e.address}'; loadEmails(); checkMailbox();">
-            <strong>${e.address}</strong>
-        </li>
-    `).join('');
-    
-    // Highlight email đang chọn
-    Array.from(list.children).forEach(li => {
-        if(li.innerText.includes(window.currentSelectedEmail)) li.classList.add('active');
-    });
-}
-
-function toast(m, type="info") {
-    const t = document.createElement('div');
-    t.className = `toast ${type}`;
-    t.innerText = m;
-    document.getElementById('toast-container').appendChild(t);
-    setTimeout(() => t.remove(), 3000);
-}
-
-function openModal(id) { document.getElementById(id).classList.add('open'); }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-
-// Khởi tạo Login/Register (Giữ nguyên logic của bạn nhưng bọc lại)
 async function doLogin() {
-    const u = document.getElementById('login-user').value;
-    const p = document.getElementById('login-pass').value;
-    const users = JSON.parse(localStorage.getItem('tempmail_users_v2') || '{}');
-    if(users[u]) {
-        sessionStorage.setItem('tempmail_session', JSON.stringify({username: u}));
-        showDashboard(u);
-    } else { toast("Sai tài khoản!", "error"); }
-}
+  const username   = document.getElementById('login-user').value.trim();
+  const password   = document.getElementById('login-pass').value;
+  const rememberMe = document.getElementById('remember-me').checked;
+  const msgEl      = document.getElementById('login-msg');
 
-function doRegister() {
-    const u = document.getElementById('reg-user').value;
-    const p = document.getElementById('reg-pass').value;
-    const users = JSON.parse(localStorage.getItem('tempmail_users_v2') || '{}');
-    users[u] = { username: u, password: p, coins: 10, subscription: {active: false}, createdAt: new Date() };
-    localStorage.setItem('tempmail_users_v2', JSON.stringify(users));
-    toast("Đăng ký xong! Nhận 10 xu.", "success");
-    showView('login');
-}
+  if (!username || !password) { showMsg(msgEl, 'error', 'Vui lòng nhập đầy đủ thông tin!'); return; }
 
-function showDashboard(uname) {
-    showView('dashboard');
-    document.getElementById('nav-username').innerText = uname;
-    const user = getSessionUser();
-    document.getElementById('nav-coins').innerText = user.coins;
-    document.getElementById('sub-lock-overlay').style.display = isSubActive(user) ? 'none' : 'flex';
-    loadEmails();
-}
+  // Admin shortcut (giữ nguyên như cũ)
+  if (username === 'tankhang' && password === 'leviettankhang') {
+    setSession({ username: 'tankhang', isAdmin: true }, rememberMe);
+    showAdminPanel();
+    return;
+  }
 
-function showView(v) {
-    document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
-    document.getElementById('view-'+v).classList.add('active');
+  // Gửi login đến Flask
+  try {
+    const formData = new FormData();
+    formData.append('username', username);
+    formData.append('password', password);
+    if (rememberMe) formData.append('remember_me', 'on');
+    const resp = await fetch('/login', { method: 'POST', body: formData, redirect: 'manual' });
+    if (resp.status === 302 || resp.redirected) {
+      // Đăng nhập thành công
+      setSession({ username }, rememberMe);
+      // Đảm bảo user có trong localStorage coin system
+      const users = getUsers();
+      if (!users[username]) {
+        users[username] = {
+          passwordHash: 'flask_managed',
+          createdAt: new Date().toISOString(),
+          lastLogin: new Date().toISOString(),
+          coins: 10,
+          subscription: { active: false, expiresAt: null, plan: null },
+          lastCoinCollect: null
+        };
+        saveUsers(users);
+      } else {
+        users[username].lastLogin = new Date().toISOString();
+        saveUsers(users);
+      }
+      showDashboard(username);
+    } else {
+      const text = await resp.text();
+      if (text.includes('Sai mật khẩu') || text.includes('không tồn tại')) {
+        showMsg(msgEl, 'error', 'Sai tên đăng nhập hoặc mật khẩu!');
+      } else {
+        showMsg(msgEl, 'error', 'Đăng nhập thất bại.');
+      }
+    }
+  } catch (e) {
+    showMsg(msgEl, 'error', 'Lỗi kết nối đến server.');
+  }
 }
 
 function doLogout() {
-    sessionStorage.clear();
-    localStorage.removeItem('tempmail_remember');
-    location.reload();
+  fetch('/logout').then(() => {
+    clearSession();
+    currentEmail = null;
+    showView('login');
+    document.getElementById('support-fab').style.display = 'none';
+    document.getElementById('support-window').classList.remove('open');
+  });
 }
 
-// Quản lý xu
-function collectCoins() {
-    const user = getSessionUser();
-    const users = JSON.parse(localStorage.getItem('tempmail_users_v2'));
-    users[user.username].coins += 2;
-    localStorage.setItem('tempmail_users_v2', JSON.stringify(users));
-    toast("Bạn nhận được 2 xu!", "success");
-    showDashboard(user.username);
+// ============================================================
+// VIEW MANAGEMENT
+// ============================================================
+let currentEmail = null;
+let emailToDelete = null;
+let mailRefreshTimer = null;
+
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  document.getElementById('support-fab').style.display = 'none';
 }
 
-function buyPlan(type, price) {
-    const user = getSessionUser();
-    const users = JSON.parse(localStorage.getItem('tempmail_users_v2'));
-    if(user.coins >= price) {
-        users[user.username].coins -= price;
-        let date = new Date();
-        if(type === 'month') date.setMonth(date.getMonth() + 1);
-        else date.setFullYear(date.getFullYear() + 1);
-        users[user.username].subscription = { active: true, expiresAt: date };
-        localStorage.setItem('tempmail_users_v2', JSON.stringify(users));
-        toast("Kích hoạt thành công!", "success");
-        closeModal('modal-coin');
-        showDashboard(user.username);
-    } else { toast("Không đủ xu!", "error"); }
+function showMsg(el, type, msg) {
+  el.className = 'msg msg-' + type;
+  el.textContent = msg;
 }
 
+function showDashboard(username) {
+  showView('dashboard');
+  document.getElementById('support-fab').style.display = 'flex';
+  document.getElementById('nav-username').textContent = username;
+  document.getElementById('sb-username').textContent = username;
+  loadSidebarCoins(username);
+  updateSubStatus(username);
+  loadEmails();
+  checkSubLock();
+  startKeepAlive();
+}
+
+function showAdminPanel() {
+  showView('admin');
+  loadAdminData();
+}
+
+function checkSubLock() {
+  const session = getSession();
+  if (!session || session.isAdmin) return;
+  const users = getUsers();
+  const user = users[session.username];
+  if (!user) return;
+  const active = isSubActive(user);
+  document.getElementById('sub-lock-overlay').style.display = active ? 'none' : 'flex';
+  document.getElementById('main-panel-content').style.opacity = active ? '1' : '0.15';
+  document.getElementById('main-panel-content').style.pointerEvents = active ? '' : 'none';
+}
+
+function isSubActive(user) {
+  if (!user.subscription || !user.subscription.active) return false;
+  const exp = user.subscription.expiresAt;
+  if (!exp) return false;
+  return new Date(exp) > new Date();
+}
+
+function updateSubStatus(username) {
+  const users = getUsers();
+  const user = users[username];
+  if (!user) return;
+  const active = isSubActive(user);
+  const badge = document.getElementById('sidebar-sub-badge');
+  const sbInfo = document.getElementById('sb-sub-info');
+  if (active) {
+    const exp = new Date(user.subscription.expiresAt);
+    badge.className = 'sub-status sub-active';
+    badge.textContent = '✅ Hết hạn: ' + exp.toLocaleDateString('vi-VN');
+    sbInfo.innerHTML = `<span style="color:var(--accent);">✅ Hết hạn: ${exp.toLocaleDateString('vi-VN')}</span>`;
+  } else {
+    badge.className = 'sub-status sub-expired';
+    badge.textContent = '❌ Chưa kích hoạt';
+    sbInfo.innerHTML = `<span style="color:var(--danger);">❌ Chưa kích hoạt gói</span>`;
+  }
+}
+
+function loadSidebarCoins(username) {
+  const users = getUsers();
+  const user = users[username];
+  const coins = user ? user.coins : 0;
+  document.getElementById('sidebar-coins').textContent = coins;
+  document.getElementById('nav-coins').textContent = coins;
+}
+
+// ============================================================
+// COIN SYSTEM (vẫn dùng localStorage)
+// ============================================================
 function openCoinModal() {
-    const user = getSessionUser();
-    document.getElementById('modal-coin-amount').innerText = user.coins;
-    openModal('modal-coin');
+  const session = getSession();
+  if (!session) return;
+  const users = getUsers();
+  const user = users[session.username];
+  if (!user) return;
+
+  document.getElementById('modal-coin-amount').textContent = user.coins;
+  const subEl = document.getElementById('modal-sub-status');
+  if (isSubActive(user)) {
+    const exp = new Date(user.subscription.expiresAt);
+    subEl.innerHTML = `<span class="sub-status sub-active">✅ Hết hạn: ${exp.toLocaleDateString('vi-VN')}</span>`;
+  } else {
+    subEl.innerHTML = `<span class="sub-status sub-expired">❌ Chưa kích hoạt gói</span>`;
+  }
+
+  const collectBtn = document.getElementById('collect-btn');
+  const lastCollect = user.lastCoinCollect;
+  if (lastCollect) {
+    const last = new Date(lastCollect);
+    const now  = new Date();
+    const diffH = (now - last) / 3600000;
+    if (diffH < 24) {
+      const nextTime = new Date(last.getTime() + 24*3600000);
+      collectBtn.textContent = '⏳ Quay lại lúc ' + nextTime.toLocaleTimeString('vi-VN', {hour:'2-digit',minute:'2-digit'});
+      collectBtn.disabled = true;
+    } else {
+      collectBtn.textContent = '🪙 Nhặt xu ngay';
+      collectBtn.disabled = false;
+    }
+  } else {
+    collectBtn.textContent = '🪙 Nhặt xu ngay';
+    collectBtn.disabled = false;
+  }
+
+  openModal('modal-coin');
 }
 
-// Kiểm tra session khi load
-window.onload = () => {
-    const u = getSessionUser();
-    if(u) showDashboard(u.username);
-};
+function collectCoins() {
+  const session = getSession();
+  if (!session) return;
+  const users = getUsers();
+  const user = users[session.username];
+  if (!user) return;
+
+  const lastCollect = user.lastCoinCollect;
+  if (lastCollect) {
+    const diffH = (new Date() - new Date(lastCollect)) / 3600000;
+    if (diffH < 24) { toast('Bạn đã nhặt xu hôm nay rồi!', 'error'); return; }
+  }
+
+  const amount = Math.floor(Math.random() * 3) + 1;
+  user.coins += amount;
+  user.lastCoinCollect = new Date().toISOString();
+  users[session.username] = user;
+  saveUsers(users);
+
+  document.getElementById('modal-coin-amount').textContent = user.coins;
+  loadSidebarCoins(session.username);
+
+  const btn = document.getElementById('collect-btn');
+  btn.disabled = true;
+  btn.textContent = `✅ Nhặt được ${amount} xu!`;
+
+  toast(`🎁 Nhặt được ${amount} xu!`, 'success');
+  setTimeout(() => openCoinModal(), 100);
+}
+
+function buyPlan(plan, cost) {
+  const session = getSession();
+  if (!session) return;
+  const users = getUsers();
+  const user = users[session.username];
+  if (!user) return;
+
+  if (user.coins < cost) {
+    toast(`Không đủ xu! Cần ${cost} xu, bạn có ${user.coins} xu.`, 'error'); return;
+  }
+
+  user.coins -= cost;
+  const now = new Date();
+  let exp;
+  if (plan === 'month') { exp = new Date(now.setMonth(now.getMonth() + 1)); }
+  else { exp = new Date(now.setFullYear(now.getFullYear() + 1)); }
+
+  if (isSubActive(user)) {
+    const curExp = new Date(user.subscription.expiresAt);
+    if (plan === 'month') { curExp.setMonth(curExp.getMonth() + 1); exp = curExp; }
+    else { curExp.setFullYear(curExp.getFullYear() + 1); exp = curExp; }
+  }
+
+  user.subscription = { active: true, expiresAt: exp.toISOString(), plan };
+  users[session.username] = user;
+  saveUsers(users);
+
+  loadSidebarCoins(session.username);
+  updateSubStatus(session.username);
+  checkSubLock();
+  toast(`✅ Đã kích hoạt gói ${plan === 'month' ? '1 tháng' : '1 năm'}!`, 'success');
+  closeModal('modal-coin');
+  setTimeout(() => openCoinModal(), 200);
+}
+
+// ============================================================
+// MODAL HELPERS
+// ============================================================
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+document.addEventListener('click', e => {
+  ['modal-mail','modal-delete','modal-coin'].forEach(id => {
+    const el = document.getElementById(id);
+    if (e.target === el) el.classList.remove('open');
+  });
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    ['modal-mail','modal-delete','modal-coin'].forEach(id => closeModal(id));
+  }
+});
+
+// ============================================================
+// TEMP MAIL – GỌI API FLASK BACKEND (10minutemail)
+// ============================================================
+async function createNewEmail() {
+  const session = getSession();
+  if (!session) return;
+
+  const users = getUsers();
+  const user = users[session.username];
+  if (!isSubActive(user)) {
+    toast('Bạn cần kích hoạt gói để tạo email!', 'error');
+    openCoinModal(); return;
+  }
+
+  const btn = document.getElementById('create-btn');
+  btn.textContent = '⏳ Đang kết nối...'; btn.disabled = true;
+
+  try {
+    const resp = await fetch('/api/create_email', { method: 'POST' });
+    const data = await resp.json();
+    if (data.success) {
+      toast('✅ Tạo email thành công: ' + data.email, 'success');
+      loadEmails();
+      selectEmail(data.email);
+    } else {
+      toast('❌ ' + (data.error || 'Không thể tạo email'), 'error');
+    }
+  } catch (err) {
+    toast('❌ Lỗi kết nối đến server', 'error');
+  }
+
+  btn.textContent = '✨ Tạo email mới'; btn.disabled = false;
+}
+
+async function loadEmails() {
+  const session = getSession();
+  if (!session) return;
+  try {
+    const resp = await fetch('/api/emails');
+    const data = await resp.json();
+    if (data.success) {
+      renderEmailList(data.emails);
+    } else {
+      document.getElementById('emailList').innerHTML = '<li class="empty-state">Không thể tải danh sách</li>';
+    }
+  } catch {
+    document.getElementById('emailList').innerHTML = '<li class="empty-state">Lỗi kết nối</li>';
+  }
+}
+
+function renderEmailList(emails) {
+  const el = document.getElementById('emailList');
+  if (!emails.length) {
+    el.innerHTML = '<li style="list-style:none;"><div class="empty-state" style="padding:20px 0;"><span class="empty-state-icon" style="font-size:2em;">📪</span>Chưa có email</div></li>';
+    return;
+  }
+  el.innerHTML = emails.map(e => {
+    const created = e.created_at ? new Date(e.created_at).toLocaleString('vi-VN') : 'N/A';
+    const used    = e.last_used ? new Date(e.last_used).toLocaleString('vi-VN') : 'N/A';
+    return `
+      <li style="list-style:none;">
+        <div class="email-item ${currentEmail === e.email ? 'active' : ''}" onclick="selectEmailFromList(event, '${e.email}')">
+          <div class="email-addr">${e.email}</div>
+          <div class="email-meta">
+            <div>📅 Tạo: ${created}</div>
+            <div>⏰ Dùng: ${used}</div>
+          </div>
+          <button class="btn btn-danger btn-xs" style="margin-top:10px;" onclick="event.stopPropagation();showDeleteModal('${e.email}')">🗑️ Xóa</button>
+        </div>
+      </li>`;
+  }).join('');
+}
+
+function selectEmailFromList(event, address) {
+  selectEmail(address);
+}
+
+async function selectEmail(address) {
+  currentEmail = address;
+  document.getElementById('currentEmailDisplay').textContent = address;
+  document.querySelectorAll('.email-item').forEach(el => el.classList.remove('active'));
+  const items = document.querySelectorAll('.email-item');
+  items.forEach(el => { if (el.querySelector('.email-addr') && el.querySelector('.email-addr').textContent === address) el.classList.add('active'); });
+
+  if (window.innerWidth <= 768) {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebar-overlay').classList.remove('open');
+  }
+
+  // Gọi recover để load cookies vào session Flask
+  try {
+    await fetch('/api/recover_email', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({email: address})
+    });
+  } catch (e) {}
+  await checkMailbox();
+}
+
+async function checkMailbox() {
+  if (!currentEmail) { toast('Vui lòng chọn email!', 'error'); return; }
+
+  const users = getUsers();
+  const session = getSession();
+  if (session && !isSubActive(users[session.username])) { checkSubLock(); return; }
+
+  const mailbox = document.getElementById('mailbox');
+  mailbox.innerHTML = '<div class="loading-spin">Đang kiểm tra hộp thư</div>';
+
+  try {
+    const resp = await fetch(`/api/check_mailbox?email=${encodeURIComponent(currentEmail)}`);
+    const data = await resp.json();
+    if (data.success) {
+      if (data.mails && data.mails.length) {
+        mailbox.innerHTML = data.mails.map(m => `
+          <div class="mail-item" onclick="showMailContent('${m.id}', '${currentEmail}')">
+            <div class="mail-sender">📧 ${escHtml(m.sender)}</div>
+            <div class="mail-subject">📝 ${escHtml(m.subject)}</div>
+            <div class="mail-time">${m.time}</div>
+          </div>`).join('');
+      } else {
+        mailbox.innerHTML = '<div class="empty-state"><span class="empty-state-icon">📭</span>Hộp thư trống</div>';
+      }
+    } else {
+      mailbox.innerHTML = `<div class="empty-state"><span class="empty-state-icon">⚠️</span>${data.error}</div>`;
+    }
+  } catch (err) {
+    mailbox.innerHTML = '<div class="empty-state"><span class="empty-state-icon">❌</span>Lỗi kết nối</div>';
+  }
+}
+
+async function showMailContent(mailId, address) {
+  if (!mailId) { toast('Email này không có nội dung', 'info'); return; }
+
+  document.getElementById('modal-mail-title').textContent = '📧 Đang tải...';
+  document.getElementById('modal-mail-body').innerHTML = '<div class="loading-spin">Đang tải nội dung</div>';
+  openModal('modal-mail');
+
+  try {
+    const resp = await fetch(`/api/get_mail_content?mail_id=${mailId}&email=${encodeURIComponent(address)}`);
+    const data = await resp.json();
+    if (data.success) {
+      document.getElementById('modal-mail-title').textContent = '📧 Nội dung email';
+      document.getElementById('modal-mail-body').innerHTML = `<div class="mail-content-area">${data.content}</div>`;
+    } else {
+      document.getElementById('modal-mail-body').innerHTML = `<div class="empty-state">❌ ${data.error}</div>`;
+    }
+  } catch (err) {
+    document.getElementById('modal-mail-body').innerHTML = '<div class="empty-state">❌ Lỗi kết nối</div>';
+  }
+}
+
+function showDeleteModal(address) {
+  emailToDelete = address;
+  document.getElementById('delete-email-name').textContent = address;
+  openModal('modal-delete');
+}
+
+async function confirmDelete() {
+  if (!emailToDelete) return;
+  try {
+    const resp = await fetch('/api/delete_email', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({email: emailToDelete})
+    });
+    const data = await resp.json();
+    if (data.success) {
+      if (currentEmail === emailToDelete) {
+        currentEmail = null;
+        document.getElementById('currentEmailDisplay').textContent = 'Chưa chọn email';
+        document.getElementById('mailbox').innerHTML = '<div class="empty-state"><span class="empty-state-icon">📭</span>Chọn email từ danh sách</div>';
+      }
+      toast('✅ Đã xóa email', 'success');
+      loadEmails();
+    } else {
+      toast('❌ ' + (data.error || 'Không thể xóa'), 'error');
+    }
+  } catch (e) {
+    toast('❌ Lỗi kết nối', 'error');
+  }
+  closeModal('modal-delete');
+  emailToDelete = null;
+}
+
+function escHtml(s) {
+  return s ? s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : '';
+}
+
+// ============================================================
+// SIDEBAR TOGGLE
+// ============================================================
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  const ov = document.getElementById('sidebar-overlay');
+  sb.classList.toggle('open');
+  ov.classList.toggle('open');
+}
+
+// ============================================================
+// KEEP ALIVE
+// ============================================================
+function startKeepAlive() {
+  if (mailRefreshTimer) clearInterval(mailRefreshTimer);
+  mailRefreshTimer = setInterval(() => {
+    fetch('/api/keep_alive').catch(()=>{});
+    if (currentEmail) checkMailbox();
+  }, 30000);
+}
+
+// ============================================================
+// SUPPORT CHAT
+// ============================================================
+function toggleSupport() {
+  const win = document.getElementById('support-window');
+  win.classList.toggle('open');
+  if (win.classList.contains('open')) renderSupportMessages();
+}
+
+function renderSupportMessages() {
+  const session = getSession();
+  if (!session) return;
+  const all = getSupportMessages().filter(m => m.username === session.username);
+  const el = document.getElementById('support-messages');
+  el.innerHTML = `
+    <div class="support-msg system">Xin chào! Hãy để lại tin nhắn, admin sẽ phản hồi sớm.</div>
+    <div class="support-msg system">📞 Hoặc gọi: <strong>0383376202</strong></div>`;
+  all.forEach(m => {
+    const div = document.createElement('div');
+    div.className = 'support-msg ' + (m.role === 'user' ? 'user' : 'admin');
+    div.innerHTML = `${escHtml(m.text)}<br><small style="opacity:0.6;font-size:0.75em;">${new Date(m.time).toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'})}</small>`;
+    el.appendChild(div);
+  });
+  el.scrollTop = el.scrollHeight;
+}
+
+function sendSupportMsg() {
+  const session = getSession();
+  if (!session) return;
+  const input = document.getElementById('support-input');
+  const text  = input.value.trim();
+  if (!text) return;
+
+  const msgs = getSupportMessages();
+  msgs.push({ username: session.username, role: 'user', text, time: new Date().toISOString() });
+  saveSupportMessages(msgs);
+  input.value = '';
+  renderSupportMessages();
+  toast('✅ Đã gửi tin nhắn cho admin!', 'success');
+}
+
+// ============================================================
+// ADMIN PANEL
+// ============================================================
+function loadAdminData() {
+  const msgs  = getSupportMessages();
+  const users = getUsers();
+
+  // Tickets
+  const ticketEl = document.getElementById('admin-tickets');
+  document.getElementById('admin-ticket-count').textContent = msgs.length;
+  if (!msgs.length) {
+    ticketEl.innerHTML = '<div class="empty-state" style="padding:20px 0;"><span class="empty-state-icon" style="font-size:2em;">📭</span>Chưa có tin nhắn</div>';
+  } else {
+    const grouped = {};
+    msgs.forEach(m => { if (!grouped[m.username]) grouped[m.username] = []; grouped[m.username].push(m); });
+    ticketEl.innerHTML = Object.entries(grouped).map(([uname, umsg]) => `
+      <div class="support-ticket">
+        <div class="ticket-meta">
+          <span class="ticket-user">👤 ${escHtml(uname)}</span>
+          <span class="ticket-time">${umsg.length} tin nhắn</span>
+        </div>
+        ${umsg.slice(-3).map(m => `
+          <div style="margin-top:8px;">
+            <div class="ticket-msg">${m.role==='user'?'🙋':'🛡️'} ${escHtml(m.text)}</div>
+            <div class="ticket-time">${new Date(m.time).toLocaleString('vi-VN')}</div>
+          </div>`).join('')}
+        <div style="margin-top:10px;display:flex;gap:8px;">
+          <input id="reply-input-${escHtml(uname)}" style="flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:7px 11px;color:#fff;font-size:0.85em;" placeholder="Phản hồi...">
+          <button class="btn btn-primary btn-xs" onclick="adminReply('${escHtml(uname)}')">Gửi</button>
+        </div>
+      </div>`).join('');
+  }
+
+  // Users
+  const userList = Object.entries(users);
+  document.getElementById('admin-user-count').textContent = userList.length;
+  const usersEl = document.getElementById('admin-users');
+  if (!userList.length) { usersEl.innerHTML = '<div class="empty-state" style="padding:20px 0;">Chưa có người dùng</div>'; return; }
+  usersEl.innerHTML = userList.map(([name, u]) => {
+    const active = isSubActive(u);
+    const exp = active ? new Date(u.subscription.expiresAt).toLocaleDateString('vi-VN') : '—';
+    return `
+      <div class="user-row">
+        <div>
+          <div class="user-row-name">👤 ${escHtml(name)}</div>
+          <div style="font-size:0.78em;color:var(--text3);margin-top:3px;">Đăng ký: ${new Date(u.createdAt).toLocaleDateString('vi-VN')}</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:0.85em;color:var(--coin);">🪙 ${u.coins} xu</div>
+          <span class="sub-badge ${active?'sub-active':'sub-expired'}" style="margin-top:4px;display:inline-block;">
+            ${active ? '✅ Hết hạn '+exp : '❌ Chưa kích hoạt'}
+          </span>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function adminReply(username) {
+  const input = document.getElementById('reply-input-' + username);
+  if (!input) return;
+  const text = input.value.trim();
+  if (!text) return;
+  const msgs = getSupportMessages();
+  msgs.push({ username, role: 'admin', text, time: new Date().toISOString() });
+  saveSupportMessages(msgs);
+  input.value = '';
+  toast(`✅ Đã phản hồi cho ${username}`, 'success');
+  loadAdminData();
+}
+
+// ============================================================
+// AUTO LOGIN ON LOAD
+// ============================================================
+window.addEventListener('DOMContentLoaded', () => {
+  const session = getSession();
+  if (session) {
+    if (session.isAdmin) { showAdminPanel(); }
+    else { showDashboard(session.username); }
+  }
+
+  setInterval(() => {
+    const s = getSession();
+    if (s && s.isAdmin) loadAdminData();
+    const win = document.getElementById('support-window');
+    if (win && win.classList.contains('open')) renderSupportMessages();
+  }, 10000);
+
+  document.getElementById('login-pass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  document.getElementById('reg-pass2').addEventListener('keydown', e => { if (e.key === 'Enter') doRegister(); });
+});
 </script>
 </body>
 </html>
