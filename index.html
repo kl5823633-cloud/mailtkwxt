@@ -704,12 +704,17 @@ function toast(msg, type='info', duration=3000) {
   setTimeout(() => { el.style.opacity='0'; el.style.transition='opacity 0.4s'; setTimeout(()=>el.remove(),400); }, duration);
 }
 
-// ==================== AUTH (FIXED) ====================
+// ==================== FETCH WITH CREDENTIALS ====================
+async function fetchWithAuth(url, options = {}) {
+  options.credentials = 'include';
+  return fetch(url, options);
+}
+
+// ==================== AUTH ====================
 async function checkSessionAndRedirect(username, rememberMe) {
   try {
-    const resp = await fetch('/api/emails');
-    const data = await resp.json();
-    if (data.success !== undefined || resp.status === 200) {
+    const resp = await fetchWithAuth('/api/emails');
+    if (resp.ok) {
       setSession({ username }, rememberMe);
       const users = getUsers();
       if (!users[username]) {
@@ -725,7 +730,6 @@ async function checkSessionAndRedirect(username, rememberMe) {
         users[username].lastLogin = new Date().toISOString();
       }
       saveUsers(users);
-      showDashboard(username);
       return true;
     }
   } catch(e) {}
@@ -747,22 +751,24 @@ async function doRegister() {
     formData.append('username', username);
     formData.append('password', password);
     formData.append('confirm_password', pass2);
-    await fetch('/register', { method: 'POST', body: formData });
-    const success = await checkSessionAndRedirect(username, false);
-    if (success) {
-      showMsg(msgEl, 'success', '🎉 Đăng ký thành công! Bạn nhận được 10 xu. Đang chuyển hướng...');
-    } else {
+    const resp = await fetchWithAuth('/register', { method: 'POST', body: formData });
+    
+    if (resp.ok || resp.redirected) {
+      // Sau đăng ký thành công, thử đăng nhập luôn
       const loginForm = new FormData();
       loginForm.append('username', username);
       loginForm.append('password', password);
-      await fetch('/login', { method: 'POST', body: loginForm });
-      const secondTry = await checkSessionAndRedirect(username, false);
-      if (secondTry) {
-        showMsg(msgEl, 'success', '🎉 Đăng ký thành công! Đang chuyển hướng...');
-      } else {
-        showMsg(msgEl, 'error', 'Đăng ký thành công nhưng không thể đăng nhập. Vui lòng thử lại sau.');
+      const loginResp = await fetchWithAuth('/login', { method: 'POST', body: loginForm });
+      if (loginResp.ok || loginResp.redirected) {
+        const success = await checkSessionAndRedirect(username, false);
+        if (success) {
+          showMsg(msgEl, 'success', '🎉 Đăng ký thành công! Đang chuyển hướng...');
+          setTimeout(() => showDashboard(username), 500);
+          return;
+        }
       }
     }
+    showMsg(msgEl, 'error', 'Đăng ký thất bại, vui lòng thử tên khác.');
   } catch (e) {
     showMsg(msgEl, 'error', 'Lỗi kết nối đến server.');
   }
@@ -776,6 +782,7 @@ async function doLogin() {
 
   if (!username || !password) { showMsg(msgEl, 'error', 'Vui lòng nhập đầy đủ thông tin!'); return; }
 
+  // Admin shortcut
   if (username === 'tankhang' && password === 'leviettankhang') {
     setSession({ username: 'tankhang', isAdmin: true }, rememberMe);
     showAdminPanel();
@@ -787,10 +794,16 @@ async function doLogin() {
     formData.append('username', username);
     formData.append('password', password);
     if (rememberMe) formData.append('remember_me', 'on');
-    await fetch('/login', { method: 'POST', body: formData });
-    const success = await checkSessionAndRedirect(username, rememberMe);
-    if (success) {
-      showMsg(msgEl, 'success', 'Đăng nhập thành công!');
+    const resp = await fetchWithAuth('/login', { method: 'POST', body: formData });
+    
+    if (resp.ok || resp.redirected) {
+      const success = await checkSessionAndRedirect(username, rememberMe);
+      if (success) {
+        showMsg(msgEl, 'success', 'Đăng nhập thành công!');
+        setTimeout(() => showDashboard(username), 300);
+      } else {
+        showMsg(msgEl, 'error', 'Không thể xác thực phiên làm việc.');
+      }
     } else {
       showMsg(msgEl, 'error', 'Sai tên đăng nhập hoặc mật khẩu!');
     }
@@ -800,12 +813,16 @@ async function doLogin() {
 }
 
 function doLogout() {
-  fetch('/logout').then(() => {
+  fetchWithAuth('/logout').then(() => {
     clearSession();
     currentEmail = null;
     showView('login');
     document.getElementById('support-fab').style.display = 'none';
     document.getElementById('support-window').classList.remove('open');
+  }).catch(() => {
+    // Fallback
+    clearSession();
+    showView('login');
   });
 }
 
@@ -973,7 +990,7 @@ async function createNewEmail() {
   const btn = document.getElementById('create-btn');
   btn.textContent = '⏳ Đang kết nối...'; btn.disabled = true;
   try {
-    const resp = await fetch('/api/create_email', { method: 'POST' });
+    const resp = await fetchWithAuth('/api/create_email', { method: 'POST' });
     const data = await resp.json();
     if (data.success) {
       toast('✅ Tạo email thành công: ' + data.email, 'success');
@@ -987,7 +1004,7 @@ async function loadEmails() {
   const session = getSession();
   if (!session) return;
   try {
-    const resp = await fetch('/api/emails');
+    const resp = await fetchWithAuth('/api/emails');
     const data = await resp.json();
     if (data.success) renderEmailList(data.emails);
     else document.getElementById('emailList').innerHTML = '<li class="empty-state">Không thể tải danh sách</li>';
@@ -1015,7 +1032,7 @@ async function selectEmail(address) {
   document.querySelectorAll('.email-item').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.email-item').forEach(el => { if (el.querySelector('.email-addr')?.textContent === address) el.classList.add('active'); });
   if (window.innerWidth <= 768) { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebar-overlay').classList.remove('open'); }
-  try { await fetch('/api/recover_email', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email: address}) }); } catch {}
+  try { await fetchWithAuth('/api/recover_email', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email: address}) }); } catch {}
   await checkMailbox();
 }
 async function checkMailbox() {
@@ -1026,7 +1043,7 @@ async function checkMailbox() {
   const mailbox = document.getElementById('mailbox');
   mailbox.innerHTML = '<div class="loading-spin">Đang kiểm tra hộp thư</div>';
   try {
-    const resp = await fetch(`/api/check_mailbox?email=${encodeURIComponent(currentEmail)}`);
+    const resp = await fetchWithAuth(`/api/check_mailbox?email=${encodeURIComponent(currentEmail)}`);
     const data = await resp.json();
     if (data.success) {
       if (data.mails && data.mails.length) {
@@ -1043,7 +1060,7 @@ async function showMailContent(mailId, address) {
   document.getElementById('modal-mail-body').innerHTML = '<div class="loading-spin">Đang tải nội dung</div>';
   openModal('modal-mail');
   try {
-    const resp = await fetch(`/api/get_mail_content?mail_id=${mailId}&email=${encodeURIComponent(address)}`);
+    const resp = await fetchWithAuth(`/api/get_mail_content?mail_id=${mailId}&email=${encodeURIComponent(address)}`);
     const data = await resp.json();
     if (data.success) {
       document.getElementById('modal-mail-title').textContent = '📧 Nội dung email';
@@ -1059,7 +1076,7 @@ function showDeleteModal(address) {
 async function confirmDelete() {
   if (!emailToDelete) return;
   try {
-    const resp = await fetch('/api/delete_email', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email: emailToDelete}) });
+    const resp = await fetchWithAuth('/api/delete_email', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email: emailToDelete}) });
     const data = await resp.json();
     if (data.success) {
       if (currentEmail === emailToDelete) {
@@ -1085,7 +1102,7 @@ function toggleSidebar() {
 // ==================== KEEP ALIVE ====================
 function startKeepAlive() {
   if (mailRefreshTimer) clearInterval(mailRefreshTimer);
-  mailRefreshTimer = setInterval(() => { fetch('/api/keep_alive').catch(()=>{}); if (currentEmail) checkMailbox(); }, 30000);
+  mailRefreshTimer = setInterval(() => { fetchWithAuth('/api/keep_alive').catch(()=>{}); if (currentEmail) checkMailbox(); }, 30000);
 }
 
 // ==================== SUPPORT CHAT ====================
