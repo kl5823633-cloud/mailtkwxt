@@ -491,7 +491,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 
 <!-- ===== DASHBOARD VIEW ===== -->
 <div id="view-dashboard" class="view">
-  <!-- Navbar -->
   <nav class="navbar">
     <div class="navbar-left">
       <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
@@ -503,22 +502,17 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
       <a href="#" class="logout-link" onclick="doLogout()">Đăng xuất</a>
     </div>
   </nav>
-  <!-- Sidebar overlay mobile -->
   <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
-  <!-- Download notice banner -->
   <div id="download-notice" style="background:rgba(245,158,11,0.1);border-bottom:1px solid rgba(245,158,11,0.25);padding:8px 20px;text-align:center;font-size:0.82em;color:var(--warn);display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;">
     <span>⚡ Để dùng đầy đủ, hãy <strong>tải file về máy</strong> rồi mở bằng Chrome/Edge. Preview trong Claude có thể bị giới hạn kết nối API.</span>
     <button onclick="document.getElementById('download-notice').style.display='none'" style="background:none;border:none;color:var(--warn);cursor:pointer;font-size:1.1em;">✕</button>
   </div>
-  <!-- Status bar -->
   <div class="status-bar">
     <span>🔐 <strong id="sb-username"></strong></span>
     <span class="online-dot">Online</span>
     <span id="sb-sub-info" style="font-size:0.85em;"></span>
   </div>
-  <!-- Main layout -->
   <div class="main-layout">
-    <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
       <h3 class="section-title">Email của tôi</h3>
       <button class="btn btn-primary btn-full" onclick="createNewEmail()" id="create-btn">✨ Tạo email mới</button>
@@ -528,7 +522,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
           <li class="loading-spin" style="list-style:none;padding:20px 0;"></li>
         </ul>
       </div>
-      <!-- Coin quick panel -->
       <div class="coin-panel">
         <div style="font-size:0.82em;color:var(--text3);text-align:center;margin-bottom:4px;">Xu của bạn</div>
         <div class="coin-amount" id="sidebar-coins">0</div>
@@ -538,7 +531,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
         <button class="btn btn-coin btn-full btn-sm" onclick="openCoinModal()">🪙 Quản lý xu & gói</button>
       </div>
     </div>
-    <!-- Main panel -->
     <div class="main-panel-wrap">
       <div class="main-panel" id="main-panel">
         <div id="sub-lock-overlay" class="sub-lock" style="display:none;">
@@ -565,7 +557,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
       </div>
     </div>
   </div>
-  <!-- Footer -->
   <div style="text-align:center;padding:18px 20px;color:var(--text3);font-size:0.82em;border-top:1px solid var(--border);">
     by <span style="color:var(--accent);">Lê Viết Tấn Khang</span> · Hotline: <span style="color:var(--accent);">0383376202</span>
   </div>
@@ -581,7 +572,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
     </div>
   </div>
   <div class="admin-content">
-    <!-- Support tickets -->
     <div class="admin-card">
       <div class="admin-card-title">📨 Tin nhắn hỗ trợ (<span id="admin-ticket-count">0</span>)</div>
       <div id="admin-tickets">
@@ -591,7 +581,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
         </div>
       </div>
     </div>
-    <!-- User list -->
     <div class="admin-card">
       <div class="admin-card-title">👥 Người dùng (<span id="admin-user-count">0</span>)</div>
       <div id="admin-users"></div>
@@ -600,9 +589,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 </div>
 
 <!-- ===== SUPPORT BUTTON & WINDOW ===== -->
-<button class="support-btn" id="support-fab" onclick="toggleSupport()" style="display:none;">
-  💬 Hỗ trợ
-</button>
+<button class="support-btn" id="support-fab" onclick="toggleSupport()" style="display:none;">💬 Hỗ trợ</button>
 <div class="support-window" id="support-window">
   <div class="support-header">
     <div class="support-header-title">💬 Hỗ trợ – TempMail Pro</div>
@@ -619,7 +606,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 </div>
 
 <!-- ===== MODALS ===== -->
-<!-- Mail content modal -->
 <div class="modal-overlay" id="modal-mail">
   <div class="modal-box">
     <div class="modal-title" id="modal-mail-title">📧 Nội dung email</div>
@@ -632,7 +618,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
   </div>
 </div>
 
-<!-- Delete confirm modal -->
 <div class="modal-overlay" id="modal-delete">
   <div class="modal-box">
     <div class="modal-title">🗑️ Xác nhận xóa</div>
@@ -644,7 +629,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
   </div>
 </div>
 
-<!-- Coin / Shop modal -->
 <div class="modal-overlay" id="modal-coin">
   <div class="modal-box">
     <div class="modal-title">🪙 Xu & Gói sử dụng</div>
@@ -654,13 +638,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
         <div style="font-family:'Space Mono',monospace;font-size:3em;font-weight:700;color:var(--coin);" id="modal-coin-amount">0</div>
         <div style="margin-top:8px;" id="modal-sub-status"></div>
       </div>
-      <!-- Daily collect -->
       <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:18px;">
         <div style="font-weight:600;color:#fff;margin-bottom:6px;">🎁 Nhặt xu hàng ngày</div>
         <div style="font-size:0.87em;color:var(--text2);margin-bottom:12px;">Mỗi ngày bạn có thể nhặt 1–3 xu miễn phí. Tích đủ để kích hoạt gói!</div>
         <button class="btn btn-coin btn-full" id="collect-btn" onclick="collectCoins()">🪙 Nhặt xu ngay</button>
       </div>
-      <!-- Shop -->
       <div style="font-weight:600;color:#fff;margin-bottom:12px;">🛒 Kích hoạt gói</div>
       <div class="shop-grid">
         <div class="shop-card">
@@ -684,29 +666,17 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
   </div>
 </div>
 
-<!-- Toast container -->
 <div class="toast-container" id="toast-container"></div>
 
-<!-- ===== MAIN SCRIPT ===== -->
 <script>
-// ============================================================
-// CẤU HÌNH API FLASK BACKEND (DỰA TRÊN FILE webm.py)
-// ============================================================
-const API_BASE = '';  // Cùng origin
-
-// ============================================================
-// STORAGE HELPERS (CLIENT-SIDE CHO COIN, ADMIN, SUPPORT)
-// ============================================================
+// ==================== CONFIG & HELPERS ====================
 const DB_KEY = 'tempmail_users_v2';
 const SESSION_KEY = 'tempmail_session';
 const REMEMBER_KEY = 'tempmail_remember';
 const SUPPORT_KEY = 'tempmail_support';
 
-function getUsers() {
-  try { return JSON.parse(localStorage.getItem(DB_KEY) || '{}'); } catch { return {}; }
-}
+function getUsers() { try { return JSON.parse(localStorage.getItem(DB_KEY) || '{}'); } catch { return {}; } }
 function saveUsers(u) { localStorage.setItem(DB_KEY, JSON.stringify(u)); }
-
 function getSession() {
   const s = sessionStorage.getItem(SESSION_KEY);
   if (s) return JSON.parse(s);
@@ -722,15 +692,9 @@ function clearSession() {
   sessionStorage.removeItem(SESSION_KEY);
   localStorage.removeItem(REMEMBER_KEY);
 }
-
-function getSupportMessages() {
-  try { return JSON.parse(localStorage.getItem(SUPPORT_KEY) || '[]'); } catch { return []; }
-}
+function getSupportMessages() { try { return JSON.parse(localStorage.getItem(SUPPORT_KEY) || '[]'); } catch { return []; } }
 function saveSupportMessages(msgs) { localStorage.setItem(SUPPORT_KEY, JSON.stringify(msgs)); }
 
-// ============================================================
-// TOAST
-// ============================================================
 function toast(msg, type='info', duration=3000) {
   const el = document.createElement('div');
   el.className = `toast ${type}`;
@@ -740,78 +704,16 @@ function toast(msg, type='info', duration=3000) {
   setTimeout(() => { el.style.opacity='0'; el.style.transition='opacity 0.4s'; setTimeout(()=>el.remove(),400); }, duration);
 }
 
-// ============================================================
-// AUTH LOGIC (FLASK BACKEND)
-// ============================================================
-async function doRegister() {
-  const username = document.getElementById('reg-user').value.trim();
-  const password = document.getElementById('reg-pass').value;
-  const pass2    = document.getElementById('reg-pass2').value;
-  const msgEl    = document.getElementById('reg-msg');
-
-  if (username.length < 4) { showMsg(msgEl, 'error', 'Tên đăng nhập phải từ 4 ký tự!'); return; }
-  if (password.length < 6) { showMsg(msgEl, 'error', 'Mật khẩu phải từ 6 ký tự!'); return; }
-  if (password !== pass2)  { showMsg(msgEl, 'error', 'Mật khẩu xác nhận không khớp!'); return; }
-
-  // Gửi request đăng ký đến Flask backend
+// ==================== AUTH (FIXED) ====================
+async function checkSessionAndRedirect(username, rememberMe) {
   try {
-    const formData = new FormData();
-    formData.append('username', username);
-    formData.append('password', password);
-    formData.append('confirm_password', pass2);
-    const resp = await fetch('/register', { method: 'POST', body: formData });
-    const text = await resp.text();
-    // Nếu đăng ký thành công Flask sẽ redirect, ta chặn và xử lý thủ công
-    if (resp.redirected || resp.url.includes('/login')) {
-      // Đồng thời cập nhật localStorage cho hệ thống coin
-      const users = getUsers();
-      if (!users[username]) {
-        users[username] = {
-          passwordHash: 'flask_managed',
-          createdAt: new Date().toISOString(),
-          lastLogin: null,
-          coins: 10,
-          subscription: { active: false, expiresAt: null, plan: null },
-          lastCoinCollect: null
-        };
-        saveUsers(users);
-      }
-      showMsg(msgEl, 'success', '🎉 Đăng ký thành công! Bạn nhận được 10 xu. Đang chuyển hướng...');
-      setTimeout(() => showView('login'), 1800);
-    } else {
-      showMsg(msgEl, 'error', 'Đăng ký thất bại, tên đăng nhập có thể đã tồn tại.');
-    }
-  } catch (e) {
-    showMsg(msgEl, 'error', 'Lỗi kết nối đến server.');
-  }
-}
-
-async function doLogin() {
-  const username   = document.getElementById('login-user').value.trim();
-  const password   = document.getElementById('login-pass').value;
-  const rememberMe = document.getElementById('remember-me').checked;
-  const msgEl      = document.getElementById('login-msg');
-
-  if (!username || !password) { showMsg(msgEl, 'error', 'Vui lòng nhập đầy đủ thông tin!'); return; }
-
-  // Admin shortcut (giữ nguyên như cũ)
-  if (username === 'tankhang' && password === 'leviettankhang') {
-    setSession({ username: 'tankhang', isAdmin: true }, rememberMe);
-    showAdminPanel();
-    return;
-  }
-
-  // Gửi login đến Flask
-  try {
-    const formData = new FormData();
-    formData.append('username', username);
-    formData.append('password', password);
-    if (rememberMe) formData.append('remember_me', 'on');
-    const resp = await fetch('/login', { method: 'POST', body: formData, redirect: 'manual' });
-    if (resp.status === 302 || resp.redirected) {
-      // Đăng nhập thành công
+    const resp = await fetch('/api/emails');
+    const data = await resp.json();
+    // Nếu không bị chặn (không có lỗi 'login_required') thì session hợp lệ
+    if (data.success !== undefined || resp.status === 200) {
+      // Session valid
       setSession({ username }, rememberMe);
-      // Đảm bảo user có trong localStorage coin system
+      // Ensure user in localStorage coin system
       const users = getUsers();
       if (!users[username]) {
         users[username] = {
@@ -822,19 +724,82 @@ async function doLogin() {
           subscription: { active: false, expiresAt: null, plan: null },
           lastCoinCollect: null
         };
-        saveUsers(users);
       } else {
         users[username].lastLogin = new Date().toISOString();
-        saveUsers(users);
       }
+      saveUsers(users);
       showDashboard(username);
+      return true;
+    }
+  } catch(e) {}
+  return false;
+}
+
+async function doRegister() {
+  const username = document.getElementById('reg-user').value.trim();
+  const password = document.getElementById('reg-pass').value;
+  const pass2    = document.getElementById('reg-pass2').value;
+  const msgEl    = document.getElementById('reg-msg');
+
+  if (username.length < 4) { showMsg(msgEl, 'error', 'Tên đăng nhập phải từ 4 ký tự!'); return; }
+  if (password.length < 6) { showMsg(msgEl, 'error', 'Mật khẩu phải từ 6 ký tự!'); return; }
+  if (password !== pass2)  { showMsg(msgEl, 'error', 'Mật khẩu xác nhận không khớp!'); return; }
+
+  try {
+    const formData = new FormData();
+    formData.append('username', username);
+    formData.append('password', password);
+    formData.append('confirm_password', pass2);
+    // Gửi đăng ký
+    await fetch('/register', { method: 'POST', body: formData });
+    // Kiểm tra session đã được tạo chưa bằng cách gọi API yêu cầu đăng nhập
+    const success = await checkSessionAndRedirect(username, false);
+    if (success) {
+      showMsg(msgEl, 'success', '🎉 Đăng ký thành công! Bạn nhận được 10 xu. Đang chuyển hướng...');
     } else {
-      const text = await resp.text();
-      if (text.includes('Sai mật khẩu') || text.includes('không tồn tại')) {
-        showMsg(msgEl, 'error', 'Sai tên đăng nhập hoặc mật khẩu!');
+      // Có thể Flask không tự động login, thử login thủ công
+      const loginForm = new FormData();
+      loginForm.append('username', username);
+      loginForm.append('password', password);
+      await fetch('/login', { method: 'POST', body: loginForm });
+      const secondTry = await checkSessionAndRedirect(username, false);
+      if (secondTry) {
+        showMsg(msgEl, 'success', '🎉 Đăng ký thành công! Đang chuyển hướng...');
       } else {
-        showMsg(msgEl, 'error', 'Đăng nhập thất bại.');
+        showMsg(msgEl, 'error', 'Đăng ký thành công nhưng không thể đăng nhập. Vui lòng thử lại sau.');
       }
+    }
+  } catch (e) {
+    showMsg(msgEl, 'error', 'Lỗi kết nối đến server.');
+  }
+}
+
+async function doLogin() {
+  const username = document.getElementById('login-user').value.trim();
+  const password = document.getElementById('login-pass').value;
+  const rememberMe = document.getElementById('remember-me').checked;
+  const msgEl = document.getElementById('login-msg');
+
+  if (!username || !password) { showMsg(msgEl, 'error', 'Vui lòng nhập đầy đủ thông tin!'); return; }
+
+  // Admin shortcut
+  if (username === 'tankhang' && password === 'leviettankhang') {
+    setSession({ username: 'tankhang', isAdmin: true }, rememberMe);
+    showAdminPanel();
+    return;
+  }
+
+  try {
+    const formData = new FormData();
+    formData.append('username', username);
+    formData.append('password', password);
+    if (rememberMe) formData.append('remember_me', 'on');
+    await fetch('/login', { method: 'POST', body: formData });
+    const success = await checkSessionAndRedirect(username, rememberMe);
+    if (success) {
+      showMsg(msgEl, 'success', 'Đăng nhập thành công!');
+    } else {
+      showMsg(msgEl, 'error', 'Sai tên đăng nhập hoặc mật khẩu!');
     }
   } catch (e) {
     showMsg(msgEl, 'error', 'Lỗi kết nối đến server.');
@@ -851,9 +816,7 @@ function doLogout() {
   });
 }
 
-// ============================================================
-// VIEW MANAGEMENT
-// ============================================================
+// ==================== VIEW MANAGEMENT ====================
 let currentEmail = null;
 let emailToDelete = null;
 let mailRefreshTimer = null;
@@ -863,11 +826,7 @@ function showView(name) {
   document.getElementById('view-' + name).classList.add('active');
   document.getElementById('support-fab').style.display = 'none';
 }
-
-function showMsg(el, type, msg) {
-  el.className = 'msg msg-' + type;
-  el.textContent = msg;
-}
+function showMsg(el, type, msg) { el.className = 'msg msg-' + type; el.textContent = msg; }
 
 function showDashboard(username) {
   showView('dashboard');
@@ -880,11 +839,7 @@ function showDashboard(username) {
   checkSubLock();
   startKeepAlive();
 }
-
-function showAdminPanel() {
-  showView('admin');
-  loadAdminData();
-}
+function showAdminPanel() { showView('admin'); loadAdminData(); }
 
 function checkSubLock() {
   const session = getSession();
@@ -897,14 +852,12 @@ function checkSubLock() {
   document.getElementById('main-panel-content').style.opacity = active ? '1' : '0.15';
   document.getElementById('main-panel-content').style.pointerEvents = active ? '' : 'none';
 }
-
 function isSubActive(user) {
   if (!user.subscription || !user.subscription.active) return false;
   const exp = user.subscription.expiresAt;
   if (!exp) return false;
   return new Date(exp) > new Date();
 }
-
 function updateSubStatus(username) {
   const users = getUsers();
   const user = users[username];
@@ -923,7 +876,6 @@ function updateSubStatus(username) {
     sbInfo.innerHTML = `<span style="color:var(--danger);">❌ Chưa kích hoạt gói</span>`;
   }
 }
-
 function loadSidebarCoins(username) {
   const users = getUsers();
   const user = users[username];
@@ -932,104 +884,76 @@ function loadSidebarCoins(username) {
   document.getElementById('nav-coins').textContent = coins;
 }
 
-// ============================================================
-// COIN SYSTEM (vẫn dùng localStorage)
-// ============================================================
+// ==================== COIN SYSTEM ====================
 function openCoinModal() {
   const session = getSession();
   if (!session) return;
   const users = getUsers();
   const user = users[session.username];
   if (!user) return;
-
   document.getElementById('modal-coin-amount').textContent = user.coins;
   const subEl = document.getElementById('modal-sub-status');
   if (isSubActive(user)) {
     const exp = new Date(user.subscription.expiresAt);
     subEl.innerHTML = `<span class="sub-status sub-active">✅ Hết hạn: ${exp.toLocaleDateString('vi-VN')}</span>`;
-  } else {
-    subEl.innerHTML = `<span class="sub-status sub-expired">❌ Chưa kích hoạt gói</span>`;
-  }
-
+  } else subEl.innerHTML = `<span class="sub-status sub-expired">❌ Chưa kích hoạt gói</span>`;
   const collectBtn = document.getElementById('collect-btn');
   const lastCollect = user.lastCoinCollect;
   if (lastCollect) {
     const last = new Date(lastCollect);
-    const now  = new Date();
-    const diffH = (now - last) / 3600000;
+    const diffH = (new Date() - last) / 3600000;
     if (diffH < 24) {
       const nextTime = new Date(last.getTime() + 24*3600000);
       collectBtn.textContent = '⏳ Quay lại lúc ' + nextTime.toLocaleTimeString('vi-VN', {hour:'2-digit',minute:'2-digit'});
       collectBtn.disabled = true;
-    } else {
-      collectBtn.textContent = '🪙 Nhặt xu ngay';
-      collectBtn.disabled = false;
-    }
-  } else {
-    collectBtn.textContent = '🪙 Nhặt xu ngay';
-    collectBtn.disabled = false;
-  }
-
+    } else { collectBtn.textContent = '🪙 Nhặt xu ngay'; collectBtn.disabled = false; }
+  } else { collectBtn.textContent = '🪙 Nhặt xu ngay'; collectBtn.disabled = false; }
   openModal('modal-coin');
 }
-
 function collectCoins() {
   const session = getSession();
   if (!session) return;
   const users = getUsers();
   const user = users[session.username];
   if (!user) return;
-
   const lastCollect = user.lastCoinCollect;
   if (lastCollect) {
     const diffH = (new Date() - new Date(lastCollect)) / 3600000;
     if (diffH < 24) { toast('Bạn đã nhặt xu hôm nay rồi!', 'error'); return; }
   }
-
   const amount = Math.floor(Math.random() * 3) + 1;
   user.coins += amount;
   user.lastCoinCollect = new Date().toISOString();
   users[session.username] = user;
   saveUsers(users);
-
   document.getElementById('modal-coin-amount').textContent = user.coins;
   loadSidebarCoins(session.username);
-
   const btn = document.getElementById('collect-btn');
   btn.disabled = true;
   btn.textContent = `✅ Nhặt được ${amount} xu!`;
-
   toast(`🎁 Nhặt được ${amount} xu!`, 'success');
   setTimeout(() => openCoinModal(), 100);
 }
-
 function buyPlan(plan, cost) {
   const session = getSession();
   if (!session) return;
   const users = getUsers();
   const user = users[session.username];
   if (!user) return;
-
-  if (user.coins < cost) {
-    toast(`Không đủ xu! Cần ${cost} xu, bạn có ${user.coins} xu.`, 'error'); return;
-  }
-
+  if (user.coins < cost) { toast(`Không đủ xu! Cần ${cost} xu, bạn có ${user.coins} xu.`, 'error'); return; }
   user.coins -= cost;
   const now = new Date();
   let exp;
-  if (plan === 'month') { exp = new Date(now.setMonth(now.getMonth() + 1)); }
-  else { exp = new Date(now.setFullYear(now.getFullYear() + 1)); }
-
+  if (plan === 'month') exp = new Date(now.setMonth(now.getMonth() + 1));
+  else exp = new Date(now.setFullYear(now.getFullYear() + 1));
   if (isSubActive(user)) {
     const curExp = new Date(user.subscription.expiresAt);
     if (plan === 'month') { curExp.setMonth(curExp.getMonth() + 1); exp = curExp; }
     else { curExp.setFullYear(curExp.getFullYear() + 1); exp = curExp; }
   }
-
   user.subscription = { active: true, expiresAt: exp.toISOString(), plan };
   users[session.username] = user;
   saveUsers(users);
-
   loadSidebarCoins(session.username);
   updateSubStatus(session.username);
   checkSubLock();
@@ -1038,41 +962,23 @@ function buyPlan(plan, cost) {
   setTimeout(() => openCoinModal(), 200);
 }
 
-// ============================================================
-// MODAL HELPERS
-// ============================================================
+// ==================== MODAL HELPERS ====================
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-
 document.addEventListener('click', e => {
-  ['modal-mail','modal-delete','modal-coin'].forEach(id => {
-    const el = document.getElementById(id);
-    if (e.target === el) el.classList.remove('open');
-  });
+  ['modal-mail','modal-delete','modal-coin'].forEach(id => { if (e.target === document.getElementById(id)) closeModal(id); });
 });
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    ['modal-mail','modal-delete','modal-coin'].forEach(id => closeModal(id));
-  }
-});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') ['modal-mail','modal-delete','modal-coin'].forEach(closeModal); });
 
-// ============================================================
-// TEMP MAIL – GỌI API FLASK BACKEND (10minutemail)
-// ============================================================
+// ==================== TEMP MAIL API ====================
 async function createNewEmail() {
   const session = getSession();
   if (!session) return;
-
   const users = getUsers();
   const user = users[session.username];
-  if (!isSubActive(user)) {
-    toast('Bạn cần kích hoạt gói để tạo email!', 'error');
-    openCoinModal(); return;
-  }
-
+  if (!isSubActive(user)) { toast('Bạn cần kích hoạt gói để tạo email!', 'error'); openCoinModal(); return; }
   const btn = document.getElementById('create-btn');
   btn.textContent = '⏳ Đang kết nối...'; btn.disabled = true;
-
   try {
     const resp = await fetch('/api/create_email', { method: 'POST' });
     const data = await resp.json();
@@ -1080,32 +986,20 @@ async function createNewEmail() {
       toast('✅ Tạo email thành công: ' + data.email, 'success');
       loadEmails();
       selectEmail(data.email);
-    } else {
-      toast('❌ ' + (data.error || 'Không thể tạo email'), 'error');
-    }
-  } catch (err) {
-    toast('❌ Lỗi kết nối đến server', 'error');
-  }
-
+    } else toast('❌ ' + (data.error || 'Không thể tạo email'), 'error');
+  } catch { toast('❌ Lỗi kết nối đến server', 'error'); }
   btn.textContent = '✨ Tạo email mới'; btn.disabled = false;
 }
-
 async function loadEmails() {
   const session = getSession();
   if (!session) return;
   try {
     const resp = await fetch('/api/emails');
     const data = await resp.json();
-    if (data.success) {
-      renderEmailList(data.emails);
-    } else {
-      document.getElementById('emailList').innerHTML = '<li class="empty-state">Không thể tải danh sách</li>';
-    }
-  } catch {
-    document.getElementById('emailList').innerHTML = '<li class="empty-state">Lỗi kết nối</li>';
-  }
+    if (data.success) renderEmailList(data.emails);
+    else document.getElementById('emailList').innerHTML = '<li class="empty-state">Không thể tải danh sách</li>';
+  } catch { document.getElementById('emailList').innerHTML = '<li class="empty-state">Lỗi kết nối</li>'; }
 }
-
 function renderEmailList(emails) {
   const el = document.getElementById('emailList');
   if (!emails.length) {
@@ -1114,115 +1008,65 @@ function renderEmailList(emails) {
   }
   el.innerHTML = emails.map(e => {
     const created = e.created_at ? new Date(e.created_at).toLocaleString('vi-VN') : 'N/A';
-    const used    = e.last_used ? new Date(e.last_used).toLocaleString('vi-VN') : 'N/A';
-    return `
-      <li style="list-style:none;">
-        <div class="email-item ${currentEmail === e.email ? 'active' : ''}" onclick="selectEmailFromList(event, '${e.email}')">
-          <div class="email-addr">${e.email}</div>
-          <div class="email-meta">
-            <div>📅 Tạo: ${created}</div>
-            <div>⏰ Dùng: ${used}</div>
-          </div>
-          <button class="btn btn-danger btn-xs" style="margin-top:10px;" onclick="event.stopPropagation();showDeleteModal('${e.email}')">🗑️ Xóa</button>
-        </div>
-      </li>`;
+    const used = e.last_used ? new Date(e.last_used).toLocaleString('vi-VN') : 'N/A';
+    return `<li style="list-style:none;"><div class="email-item ${currentEmail === e.email ? 'active' : ''}" onclick="selectEmailFromList(event, '${e.email}')">
+      <div class="email-addr">${e.email}</div><div class="email-meta"><div>📅 Tạo: ${created}</div><div>⏰ Dùng: ${used}</div></div>
+      <button class="btn btn-danger btn-xs" style="margin-top:10px;" onclick="event.stopPropagation();showDeleteModal('${e.email}')">🗑️ Xóa</button>
+    </div></li>`;
   }).join('');
 }
-
-function selectEmailFromList(event, address) {
-  selectEmail(address);
-}
-
+function selectEmailFromList(event, address) { selectEmail(address); }
 async function selectEmail(address) {
   currentEmail = address;
   document.getElementById('currentEmailDisplay').textContent = address;
   document.querySelectorAll('.email-item').forEach(el => el.classList.remove('active'));
-  const items = document.querySelectorAll('.email-item');
-  items.forEach(el => { if (el.querySelector('.email-addr') && el.querySelector('.email-addr').textContent === address) el.classList.add('active'); });
-
-  if (window.innerWidth <= 768) {
-    document.getElementById('sidebar').classList.remove('open');
-    document.getElementById('sidebar-overlay').classList.remove('open');
-  }
-
-  // Gọi recover để load cookies vào session Flask
-  try {
-    await fetch('/api/recover_email', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({email: address})
-    });
-  } catch (e) {}
+  document.querySelectorAll('.email-item').forEach(el => { if (el.querySelector('.email-addr')?.textContent === address) el.classList.add('active'); });
+  if (window.innerWidth <= 768) { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebar-overlay').classList.remove('open'); }
+  try { await fetch('/api/recover_email', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email: address}) }); } catch {}
   await checkMailbox();
 }
-
 async function checkMailbox() {
   if (!currentEmail) { toast('Vui lòng chọn email!', 'error'); return; }
-
-  const users = getUsers();
   const session = getSession();
+  const users = getUsers();
   if (session && !isSubActive(users[session.username])) { checkSubLock(); return; }
-
   const mailbox = document.getElementById('mailbox');
   mailbox.innerHTML = '<div class="loading-spin">Đang kiểm tra hộp thư</div>';
-
   try {
     const resp = await fetch(`/api/check_mailbox?email=${encodeURIComponent(currentEmail)}`);
     const data = await resp.json();
     if (data.success) {
       if (data.mails && data.mails.length) {
-        mailbox.innerHTML = data.mails.map(m => `
-          <div class="mail-item" onclick="showMailContent('${m.id}', '${currentEmail}')">
-            <div class="mail-sender">📧 ${escHtml(m.sender)}</div>
-            <div class="mail-subject">📝 ${escHtml(m.subject)}</div>
-            <div class="mail-time">${m.time}</div>
-          </div>`).join('');
-      } else {
-        mailbox.innerHTML = '<div class="empty-state"><span class="empty-state-icon">📭</span>Hộp thư trống</div>';
-      }
-    } else {
-      mailbox.innerHTML = `<div class="empty-state"><span class="empty-state-icon">⚠️</span>${data.error}</div>`;
-    }
-  } catch (err) {
-    mailbox.innerHTML = '<div class="empty-state"><span class="empty-state-icon">❌</span>Lỗi kết nối</div>';
-  }
+        mailbox.innerHTML = data.mails.map(m => `<div class="mail-item" onclick="showMailContent('${m.id}', '${currentEmail}')">
+          <div class="mail-sender">📧 ${escHtml(m.sender)}</div><div class="mail-subject">📝 ${escHtml(m.subject)}</div><div class="mail-time">${m.time}</div>
+        </div>`).join('');
+      } else mailbox.innerHTML = '<div class="empty-state"><span class="empty-state-icon">📭</span>Hộp thư trống</div>';
+    } else mailbox.innerHTML = `<div class="empty-state"><span class="empty-state-icon">⚠️</span>${data.error}</div>`;
+  } catch { mailbox.innerHTML = '<div class="empty-state"><span class="empty-state-icon">❌</span>Lỗi kết nối</div>'; }
 }
-
 async function showMailContent(mailId, address) {
   if (!mailId) { toast('Email này không có nội dung', 'info'); return; }
-
   document.getElementById('modal-mail-title').textContent = '📧 Đang tải...';
   document.getElementById('modal-mail-body').innerHTML = '<div class="loading-spin">Đang tải nội dung</div>';
   openModal('modal-mail');
-
   try {
     const resp = await fetch(`/api/get_mail_content?mail_id=${mailId}&email=${encodeURIComponent(address)}`);
     const data = await resp.json();
     if (data.success) {
       document.getElementById('modal-mail-title').textContent = '📧 Nội dung email';
       document.getElementById('modal-mail-body').innerHTML = `<div class="mail-content-area">${data.content}</div>`;
-    } else {
-      document.getElementById('modal-mail-body').innerHTML = `<div class="empty-state">❌ ${data.error}</div>`;
-    }
-  } catch (err) {
-    document.getElementById('modal-mail-body').innerHTML = '<div class="empty-state">❌ Lỗi kết nối</div>';
-  }
+    } else document.getElementById('modal-mail-body').innerHTML = `<div class="empty-state">❌ ${data.error}</div>`;
+  } catch { document.getElementById('modal-mail-body').innerHTML = '<div class="empty-state">❌ Lỗi kết nối</div>'; }
 }
-
 function showDeleteModal(address) {
   emailToDelete = address;
   document.getElementById('delete-email-name').textContent = address;
   openModal('modal-delete');
 }
-
 async function confirmDelete() {
   if (!emailToDelete) return;
   try {
-    const resp = await fetch('/api/delete_email', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({email: emailToDelete})
-    });
+    const resp = await fetch('/api/delete_email', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email: emailToDelete}) });
     const data = await resp.json();
     if (data.success) {
       if (currentEmail === emailToDelete) {
@@ -1232,58 +1076,38 @@ async function confirmDelete() {
       }
       toast('✅ Đã xóa email', 'success');
       loadEmails();
-    } else {
-      toast('❌ ' + (data.error || 'Không thể xóa'), 'error');
-    }
-  } catch (e) {
-    toast('❌ Lỗi kết nối', 'error');
-  }
+    } else toast('❌ ' + (data.error || 'Không thể xóa'), 'error');
+  } catch { toast('❌ Lỗi kết nối', 'error'); }
   closeModal('modal-delete');
   emailToDelete = null;
 }
+function escHtml(s) { return s ? s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : ''; }
 
-function escHtml(s) {
-  return s ? s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : '';
-}
-
-// ============================================================
-// SIDEBAR TOGGLE
-// ============================================================
+// ==================== SIDEBAR ====================
 function toggleSidebar() {
-  const sb = document.getElementById('sidebar');
-  const ov = document.getElementById('sidebar-overlay');
-  sb.classList.toggle('open');
-  ov.classList.toggle('open');
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('open');
 }
 
-// ============================================================
-// KEEP ALIVE
-// ============================================================
+// ==================== KEEP ALIVE ====================
 function startKeepAlive() {
   if (mailRefreshTimer) clearInterval(mailRefreshTimer);
-  mailRefreshTimer = setInterval(() => {
-    fetch('/api/keep_alive').catch(()=>{});
-    if (currentEmail) checkMailbox();
-  }, 30000);
+  mailRefreshTimer = setInterval(() => { fetch('/api/keep_alive').catch(()=>{}); if (currentEmail) checkMailbox(); }, 30000);
 }
 
-// ============================================================
-// SUPPORT CHAT
-// ============================================================
+// ==================== SUPPORT CHAT ====================
 function toggleSupport() {
   const win = document.getElementById('support-window');
   win.classList.toggle('open');
   if (win.classList.contains('open')) renderSupportMessages();
 }
-
 function renderSupportMessages() {
   const session = getSession();
   if (!session) return;
   const all = getSupportMessages().filter(m => m.username === session.username);
   const el = document.getElementById('support-messages');
-  el.innerHTML = `
-    <div class="support-msg system">Xin chào! Hãy để lại tin nhắn, admin sẽ phản hồi sớm.</div>
-    <div class="support-msg system">📞 Hoặc gọi: <strong>0383376202</strong></div>`;
+  el.innerHTML = `<div class="support-msg system">Xin chào! Hãy để lại tin nhắn, admin sẽ phản hồi sớm.</div>
+                  <div class="support-msg system">📞 Hoặc gọi: <strong>0383376202</strong></div>`;
   all.forEach(m => {
     const div = document.createElement('div');
     div.className = 'support-msg ' + (m.role === 'user' ? 'user' : 'admin');
@@ -1292,14 +1116,12 @@ function renderSupportMessages() {
   });
   el.scrollTop = el.scrollHeight;
 }
-
 function sendSupportMsg() {
   const session = getSession();
   if (!session) return;
   const input = document.getElementById('support-input');
-  const text  = input.value.trim();
+  const text = input.value.trim();
   if (!text) return;
-
   const msgs = getSupportMessages();
   msgs.push({ username: session.username, role: 'user', text, time: new Date().toISOString() });
   saveSupportMessages(msgs);
@@ -1308,63 +1130,39 @@ function sendSupportMsg() {
   toast('✅ Đã gửi tin nhắn cho admin!', 'success');
 }
 
-// ============================================================
-// ADMIN PANEL
-// ============================================================
+// ==================== ADMIN PANEL ====================
 function loadAdminData() {
-  const msgs  = getSupportMessages();
+  const msgs = getSupportMessages();
   const users = getUsers();
-
-  // Tickets
   const ticketEl = document.getElementById('admin-tickets');
   document.getElementById('admin-ticket-count').textContent = msgs.length;
-  if (!msgs.length) {
-    ticketEl.innerHTML = '<div class="empty-state" style="padding:20px 0;"><span class="empty-state-icon" style="font-size:2em;">📭</span>Chưa có tin nhắn</div>';
-  } else {
+  if (!msgs.length) ticketEl.innerHTML = '<div class="empty-state" style="padding:20px 0;"><span class="empty-state-icon" style="font-size:2em;">📭</span>Chưa có tin nhắn</div>';
+  else {
     const grouped = {};
     msgs.forEach(m => { if (!grouped[m.username]) grouped[m.username] = []; grouped[m.username].push(m); });
     ticketEl.innerHTML = Object.entries(grouped).map(([uname, umsg]) => `
       <div class="support-ticket">
-        <div class="ticket-meta">
-          <span class="ticket-user">👤 ${escHtml(uname)}</span>
-          <span class="ticket-time">${umsg.length} tin nhắn</span>
-        </div>
-        ${umsg.slice(-3).map(m => `
-          <div style="margin-top:8px;">
-            <div class="ticket-msg">${m.role==='user'?'🙋':'🛡️'} ${escHtml(m.text)}</div>
-            <div class="ticket-time">${new Date(m.time).toLocaleString('vi-VN')}</div>
-          </div>`).join('')}
+        <div class="ticket-meta"><span class="ticket-user">👤 ${escHtml(uname)}</span><span class="ticket-time">${umsg.length} tin nhắn</span></div>
+        ${umsg.slice(-3).map(m => `<div style="margin-top:8px;"><div class="ticket-msg">${m.role==='user'?'🙋':'🛡️'} ${escHtml(m.text)}</div><div class="ticket-time">${new Date(m.time).toLocaleString('vi-VN')}</div></div>`).join('')}
         <div style="margin-top:10px;display:flex;gap:8px;">
           <input id="reply-input-${escHtml(uname)}" style="flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:7px 11px;color:#fff;font-size:0.85em;" placeholder="Phản hồi...">
           <button class="btn btn-primary btn-xs" onclick="adminReply('${escHtml(uname)}')">Gửi</button>
         </div>
       </div>`).join('');
   }
-
-  // Users
   const userList = Object.entries(users);
   document.getElementById('admin-user-count').textContent = userList.length;
   const usersEl = document.getElementById('admin-users');
-  if (!userList.length) { usersEl.innerHTML = '<div class="empty-state" style="padding:20px 0;">Chưa có người dùng</div>'; return; }
-  usersEl.innerHTML = userList.map(([name, u]) => {
-    const active = isSubActive(u);
-    const exp = active ? new Date(u.subscription.expiresAt).toLocaleDateString('vi-VN') : '—';
-    return `
-      <div class="user-row">
-        <div>
-          <div class="user-row-name">👤 ${escHtml(name)}</div>
-          <div style="font-size:0.78em;color:var(--text3);margin-top:3px;">Đăng ký: ${new Date(u.createdAt).toLocaleDateString('vi-VN')}</div>
-        </div>
-        <div style="text-align:right;">
-          <div style="font-size:0.85em;color:var(--coin);">🪙 ${u.coins} xu</div>
-          <span class="sub-badge ${active?'sub-active':'sub-expired'}" style="margin-top:4px;display:inline-block;">
-            ${active ? '✅ Hết hạn '+exp : '❌ Chưa kích hoạt'}
-          </span>
-        </div>
-      </div>`;
-  }).join('');
+  if (!userList.length) usersEl.innerHTML = '<div class="empty-state" style="padding:20px 0;">Chưa có người dùng</div>';
+  else {
+    usersEl.innerHTML = userList.map(([name, u]) => {
+      const active = isSubActive(u);
+      const exp = active ? new Date(u.subscription.expiresAt).toLocaleDateString('vi-VN') : '—';
+      return `<div class="user-row"><div><div class="user-row-name">👤 ${escHtml(name)}</div><div style="font-size:0.78em;color:var(--text3);margin-top:3px;">Đăng ký: ${new Date(u.createdAt).toLocaleDateString('vi-VN')}</div></div>
+              <div style="text-align:right;"><div style="font-size:0.85em;color:var(--coin);">🪙 ${u.coins} xu</div><span class="sub-badge ${active?'sub-active':'sub-expired'}" style="margin-top:4px;display:inline-block;">${active ? '✅ Hết hạn '+exp : '❌ Chưa kích hoạt'}</span></div></div>`;
+    }).join('');
+  }
 }
-
 function adminReply(username) {
   const input = document.getElementById('reply-input-' + username);
   if (!input) return;
@@ -1378,23 +1176,18 @@ function adminReply(username) {
   loadAdminData();
 }
 
-// ============================================================
-// AUTO LOGIN ON LOAD
-// ============================================================
+// ==================== INIT ====================
 window.addEventListener('DOMContentLoaded', () => {
   const session = getSession();
   if (session) {
-    if (session.isAdmin) { showAdminPanel(); }
-    else { showDashboard(session.username); }
+    if (session.isAdmin) showAdminPanel();
+    else showDashboard(session.username);
   }
-
   setInterval(() => {
     const s = getSession();
     if (s && s.isAdmin) loadAdminData();
-    const win = document.getElementById('support-window');
-    if (win && win.classList.contains('open')) renderSupportMessages();
+    if (document.getElementById('support-window').classList.contains('open')) renderSupportMessages();
   }, 10000);
-
   document.getElementById('login-pass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
   document.getElementById('reg-pass2').addEventListener('keydown', e => { if (e.key === 'Enter') doRegister(); });
 });
